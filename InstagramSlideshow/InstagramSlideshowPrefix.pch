@@ -1,0 +1,32 @@
+//
+//  InstagramSlideshowPrefix.pch
+//  InstagramSlideshow
+//
+//  Created by Jon Nguy on 10/13/15.
+//  Copyright © 2015 Jon Nguy. All rights reserved.
+//
+
+#ifndef InstagramSlideshowPrefix_pch
+#define InstagramSlideshowPrefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#define INSTAGRAM_AUTHURL                               @"https://api.instagram.com/oauth/authorize/"
+#define INSTAGRAM_APIURl                                @"https://api.instagram.com/v1/users/"
+#define INSTAGRAM_APITAG                                @"https://api.instagram.com/v1/tags/benlovescrystal/media/recent?"
+#define INSTAGRAM_CLIENT_ID                             @"96bcd618c034423d98c38b9a19806c3d"
+#define INSTAGRAM_CLIENTSERCRET                         @"93c5ccb289af4f2a967084eb83216758"
+#define INSTAGRAM_REDIRECT_URI                          @"https://www.jonnguy.com"
+#define INSTAGRAM_ACCESS_TOKEN                          @"access_token"
+#define INSTAGRAM_SCOPE                                 @"likes+comments+relationships"
+
+#define BEN_LOVES_CRYSTAL                               @"benlovescrystal"
+
+#define SEARCH_COMBINED                                 [NSString stringWithFormat:@"%@q=%@",INSTAGRAM_SEARCH,BEN_LOVES_CRYSTAL]
+#define TOKEN_COMBINED                                  [NSString stringWithFormat:@"%@=%@",INSTAGRAM_ACCESS_TOKEN,[[ISSDataShare shared] authToken]]
+
+#import "ISSConstants.h"
+#import "ISSDataShare.h"
+
+#endif /* InstagramSlideshowPrefix_pch */
