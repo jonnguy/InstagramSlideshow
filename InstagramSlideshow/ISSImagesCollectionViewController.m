@@ -15,15 +15,20 @@
 #import "ISSDismissalAnimator.h"
 #import "ISSPresentationAnimator.h"
 
-@interface ISSImagesCollectionViewController () <UIWebViewDelegate, NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
+@interface ISSImagesCollectionViewController () <UIWebViewDelegate, NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate, UIPickerViewDelegate>
 
 //@property (nonatomic, strong) NSDictionary *dictOfDataFromTags;
 @property (nonatomic, strong) NSURLSession *session;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property (nonatomic, assign) CGRect openingFrame;
+@property (nonatomic, strong) UIScreen *externalScreen;
+@property (nonatomic, strong) UIWindow *externalWindow;
+@property (nonatomic, strong) NSArray *availableModes;
 
-@property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplay;
+@property (nonatomic, strong) UIPickerView *modePicker;
+
+@property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplayViewController;
 
 @end
 
@@ -34,15 +39,18 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.externalDisplay = [[ISSExternalDisplayCollectionViewController alloc] init];
-    
+    UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [aFlowLayout setItemSize:CGSizeMake(200, 140)];
+    [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.externalDisplayViewController = [[ISSExternalDisplayCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
+    self.externalWindow = [[UIWindow alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(screenDidConnect)
+                                             selector:@selector(screenDidConnect:)
                                                  name:UIScreenDidConnectNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(screenDidDisconnect)
+                                             selector:@selector(screenDidDisconnect:)
                                                  name:UIScreenDidDisconnectNotification
                                                object:nil];
     
@@ -237,14 +245,21 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 #pragma mark Notifications for Screen changes
 
-- (void)screenDidConnect {
+- (void)screenDidConnect:(NSNotification *)not {
     NSLog(@"Screen connected");
     
     NSArray *screens = [UIScreen screens];
     NSLog(@"Screens: %@", screens);
+    
+    self.externalScreen = screens[1];
+    self.availableModes = [self.externalScreen availableModes];
+    
+    [self.externalWindow setScreen:self.externalScreen];
+    [self.externalWindow addSubview:self.externalDisplayViewController.view];
+    
 }
 
-- (void)screenDidDisconnect {
+- (void)screenDidDisconnect:(NSNotification *)not {
     NSLog(@"Screen disconnected");
 }
 
