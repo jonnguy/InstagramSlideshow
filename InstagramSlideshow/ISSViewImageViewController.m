@@ -45,6 +45,12 @@
     [self.view addGestureRecognizer:rec];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self performSelector:@selector(viewTapped) withObject:nil afterDelay:2.0];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

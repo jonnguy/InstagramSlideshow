@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "InstagramSlideshow/ISSImagesCollectionViewController.m"
-            timestampString = "466495628.084701"
+            timestampString = "466496980.746388"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "-screenDidConnect:"
             landmarkType = "5">
          </BreakpointContent>

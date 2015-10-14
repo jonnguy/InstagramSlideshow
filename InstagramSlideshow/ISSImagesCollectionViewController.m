@@ -26,7 +26,7 @@
 @property (nonatomic, strong) UIWindow *externalWindow;
 @property (nonatomic, strong) NSArray *availableModes;
 
-@property (nonatomic, strong) UIPickerView *modePicker;
+@property (nonatomic, strong) NSTimer *timer;
 
 @property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplayViewController;
 
@@ -59,7 +59,11 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
-    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                  target:self
+                                                selector:@selector(tapRandomCell)
+                                                userInfo:nil
+                                                 repeats:YES];
     
     // Webview stuff.. instagram..
     NSString* authURL = [NSString stringWithFormat: @"%@?client_id=%@&redirect_uri=%@&response_type=code&scope=%@&DEBUG=True", INSTAGRAM_AUTHURL, INSTAGRAM_CLIENT_ID, INSTAGRAM_REDIRECT_URI, INSTAGRAM_SCOPE];
@@ -112,6 +116,10 @@ static NSString * const reuseIdentifier = @"ImageCell";
             
             // Refresh the table once we get something
             [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.timer fire];
+            });
         }
     }];
     
@@ -146,6 +154,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:requestData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        [self.webView removeFromSuperview];
+        
         if (error) {
             NSLog(@"Error: %@", error);
         } else {
@@ -155,11 +165,22 @@ static NSString * const reuseIdentifier = @"ImageCell";
             [[ISSDataShare shared] setAuthToken:dict[@"access_token"]];
             
             [self fetchImagesWithTag];
-            [self.webView removeFromSuperview];
         }
     }];
     
     [dataTask resume];
+}
+
+- (void)tapRandomCell {
+    NSUInteger size = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
+    if (!size) {
+        return;
+    }
+    int row = arc4random() % size;
+    NSLog(@"Selecting indexpath: %@", [NSIndexPath indexPathForRow:row inSection:0]);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+    });
 }
 
 #pragma mark <UICollectionViewDataSource>
