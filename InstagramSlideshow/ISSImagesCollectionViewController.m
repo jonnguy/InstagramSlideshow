@@ -154,7 +154,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:requestData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        [self.webView removeFromSuperview];
         
         if (error) {
             NSLog(@"Error: %@", error);
@@ -163,6 +162,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
             NSLog(@"Successfully logged in with token == %@", dict[@"access_token"]);
             NSLog(@"Dict: %@", dict);
             [[ISSDataShare shared] setAuthToken:dict[@"access_token"]];
+            
+            [self.webView removeFromSuperview];
             
             [self fetchImagesWithTag];
         }

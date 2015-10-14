@@ -100,7 +100,6 @@
 				34594AF91BCCEAD40000D908 /* ISSImagesCollectionViewController.m */,
 				34594AF41BCCE92E0000D908 /* ISSInstagramLoginViewController.h */,
 				34594AF51BCCE92E0000D908 /* ISSInstagramLoginViewController.m */,
-				34594AE51BCCE84F0000D908 /* Main.storyboard */,
 				346FE3C21BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.h */,
 				346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */,
 				346FE3B51BCE0B810003C1BC /* ISSViewImageViewController.h */,
@@ -113,6 +112,7 @@
 		34594ADC1BCCE84F0000D908 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				34594AE51BCCE84F0000D908 /* Main.storyboard */,
 				34594AEA1BCCE84F0000D908 /* LaunchScreen.storyboard */,
 				34594AE81BCCE84F0000D908 /* Assets.xcassets */,
 				34594AED1BCCE84F0000D908 /* Info.plist */,
