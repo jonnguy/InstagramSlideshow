@@ -18,6 +18,10 @@
 		34594AFD1BCCEBE00000D908 /* ISSDataShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 34594AFC1BCCEBE00000D908 /* ISSDataShare.m */; };
 		34594B001BCCF2510000D908 /* ISSImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34594AFF1BCCF2510000D908 /* ISSImageCollectionViewCell.m */; };
 		34594B031BCCF4110000D908 /* ISSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 34594B021BCCF4110000D908 /* ISSConstants.m */; };
+		346FE3B71BCE0B820003C1BC /* ISSViewImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */; };
+		346FE3BA1BCE0D3B0003C1BC /* ISSTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */; };
+		346FE3BD1BCE0EC60003C1BC /* ISSDismissalAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */; };
+		346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,14 @@
 		34594AFF1BCCF2510000D908 /* ISSImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSImageCollectionViewCell.m; sourceTree = "<group>"; };
 		34594B011BCCF4110000D908 /* ISSConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSConstants.h; sourceTree = "<group>"; };
 		34594B021BCCF4110000D908 /* ISSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSConstants.m; sourceTree = "<group>"; };
+		346FE3B51BCE0B810003C1BC /* ISSViewImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSViewImageViewController.h; sourceTree = "<group>"; };
+		346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSViewImageViewController.m; sourceTree = "<group>"; };
+		346FE3B81BCE0D3B0003C1BC /* ISSTransitioningDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSTransitioningDelegate.h; sourceTree = "<group>"; };
+		346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSTransitioningDelegate.m; sourceTree = "<group>"; };
+		346FE3BB1BCE0EC60003C1BC /* ISSDismissalAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSDismissalAnimator.h; sourceTree = "<group>"; };
+		346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSDismissalAnimator.m; sourceTree = "<group>"; };
+		346FE3BE1BCE0ECF0003C1BC /* ISSPresentationAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSPresentationAnimator.h; sourceTree = "<group>"; };
+		346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSPresentationAnimator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +84,7 @@
 		34594ADB1BCCE84F0000D908 /* InstagramSlideshow */ = {
 			isa = PBXGroup;
 			children = (
+				346FE3C11BCE0F9B0003C1BC /* Animators */,
 				34594AE81BCCE84F0000D908 /* Assets.xcassets */,
 				34594ADF1BCCE84F0000D908 /* ISSAppDelegate.h */,
 				34594AE01BCCE84F0000D908 /* ISSAppDelegate.m */,
@@ -87,6 +100,8 @@
 				34594AF51BCCE92E0000D908 /* ISSInstagramLoginViewController.m */,
 				34594AEA1BCCE84F0000D908 /* LaunchScreen.storyboard */,
 				34594AE51BCCE84F0000D908 /* Main.storyboard */,
+				346FE3B51BCE0B810003C1BC /* ISSViewImageViewController.h */,
+				346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */,
 				34594ADC1BCCE84F0000D908 /* Supporting Files */,
 			);
 			path = InstagramSlideshow;
@@ -100,6 +115,19 @@
 				34594AF31BCCE8910000D908 /* InstagramSlideshowPrefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		346FE3C11BCE0F9B0003C1BC /* Animators */ = {
+			isa = PBXGroup;
+			children = (
+				346FE3B81BCE0D3B0003C1BC /* ISSTransitioningDelegate.h */,
+				346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */,
+				346FE3BB1BCE0EC60003C1BC /* ISSDismissalAnimator.h */,
+				346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */,
+				346FE3BE1BCE0ECF0003C1BC /* ISSPresentationAnimator.h */,
+				346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */,
+			);
+			name = Animators;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,14 +201,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				346FE3BD1BCE0EC60003C1BC /* ISSDismissalAnimator.m in Sources */,
 				34594AF71BCCE9670000D908 /* InstagramSlideshowPrefix.pch in Sources */,
 				34594AE11BCCE84F0000D908 /* ISSAppDelegate.m in Sources */,
+				346FE3BA1BCE0D3B0003C1BC /* ISSTransitioningDelegate.m in Sources */,
 				34594B001BCCF2510000D908 /* ISSImageCollectionViewCell.m in Sources */,
 				34594AF61BCCE92E0000D908 /* ISSInstagramLoginViewController.m in Sources */,
+				346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */,
 				34594ADE1BCCE84F0000D908 /* main.m in Sources */,
 				34594B031BCCF4110000D908 /* ISSConstants.m in Sources */,
 				34594AFA1BCCEAD40000D908 /* ISSImagesCollectionViewController.m in Sources */,
 				34594AFD1BCCEBE00000D908 /* ISSDataShare.m in Sources */,
+				346FE3B71BCE0B820003C1BC /* ISSViewImageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

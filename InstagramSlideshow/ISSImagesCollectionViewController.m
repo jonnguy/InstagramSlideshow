@@ -8,11 +8,15 @@
 
 #import "ISSImagesCollectionViewController.h"
 #import "ISSImageCollectionViewCell.h"
+#import "ISSTransitioningDelegate.h"
+#import "ISSViewImageViewController.h"
 
-@interface ISSImagesCollectionViewController () <NSURLSessionDelegate>
+@interface ISSImagesCollectionViewController () <NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong) NSDictionary *dictOfDataFromTags;
 @property (nonatomic, strong) NSURLSession *session;
+
+@property (nonatomic, strong) ISSTransitioningDelegate *transitionDelegate;
 
 @end
 
@@ -30,6 +34,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
     self.dictOfDataFromTags = [NSDictionary dictionary];
     
     self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    self.transitionDelegate = [[ISSTransitioningDelegate alloc] init];
     
     [self fetchImagesWithTag];
 }
@@ -75,7 +81,11 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(80.f, 80.f);
+    return CGSizeMake(90.f, 90.f);
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(10.0, 5.0, 0.0, 5.0);
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -88,20 +98,21 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     NSLog(@"Cell: %@", cell);
     
-//    UIImageView *recipeImageView = [[UIImageView alloc] init];
-//    
-//    NSString *imageURL = self.dictOfDataFromTags[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
-//    NSLog(@"Image URL: %@", imageURL);
-//    
-//    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
-//    recipeImageView.image = image;
-//    recipeImageView.frame = cell.bounds;
-//    [cell addSubview:recipeImageView];
+    UIImageView *recipeImageView = [[UIImageView alloc] init];
     
     NSString *imageURL = self.dictOfDataFromTags[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
     NSLog(@"Image URL: %@", imageURL);
+    cell.imageUrl = imageURL;
+    
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
-    cell.instagramPicture.image = image;
+    recipeImageView.image = image;
+    recipeImageView.frame = cell.bounds;
+    [cell addSubview:recipeImageView];
+    
+//    NSString *imageURL = self.dictOfDataFromTags[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
+//    NSLog(@"Image URL: %@", imageURL);
+//    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
+//    cell.instagramPicture.image = image;
 
     
     return cell;
@@ -109,6 +120,21 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select at: %@", indexPath);
+    
+    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
+    CGRect attributesFrame = attr.frame;
+    CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];
+    
+    self.transitionDelegate.openingFrame = frameToOpenFrom;
+    
+    ISSViewImageViewController *vc = [[ISSViewImageViewController alloc] init];
+    vc.imageUrl = cell.imageUrl;
+    vc.transitioningDelegate = self.transitioningDelegate;
+    vc.modalPresentationCapturesStatusBarAppearance = UIModalPresentationPopover;
+    [self presentViewController:vc animated:YES completion:nil];
+    
 }
 
 

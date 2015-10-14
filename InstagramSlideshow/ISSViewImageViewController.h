@@ -1,5 +1,5 @@
 //
-//  ISSImageCollectionViewCell.h
+//  ISSViewImageViewController.h
 //  InstagramSlideshow
 //
 //  Created by Jon Nguy on 10/13/15.
@@ -8,9 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ISSImageCollectionViewCell : UICollectionViewCell
+@interface ISSViewImageViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIImageView *instagramPicture;
 @property (nonatomic, strong) NSString *imageUrl;
 
 @end

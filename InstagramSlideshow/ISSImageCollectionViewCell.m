@@ -12,14 +12,11 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-        self = [super initWithFrame:frame];
-        if (self) {
-                
-                imageView = [[UIImageView alloc] init];
-                [self.contentView addSubview:imageView];
-                
-            }
-        return self;
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self.contentView addSubview:self.instagramPicture];
+    }
+    return self;
 }
 
 @end
