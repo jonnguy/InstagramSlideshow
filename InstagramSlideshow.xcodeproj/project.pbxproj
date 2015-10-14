@@ -22,6 +22,7 @@
 		346FE3BA1BCE0D3B0003C1BC /* ISSTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */; };
 		346FE3BD1BCE0EC60003C1BC /* ISSDismissalAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */; };
 		346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */; };
+		346FE3C41BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,8 @@
 		346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSDismissalAnimator.m; sourceTree = "<group>"; };
 		346FE3BE1BCE0ECF0003C1BC /* ISSPresentationAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSPresentationAnimator.h; sourceTree = "<group>"; };
 		346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSPresentationAnimator.m; sourceTree = "<group>"; };
+		346FE3C21BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSExternalDisplayCollectionViewController.h; sourceTree = "<group>"; };
+		346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSExternalDisplayCollectionViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +101,8 @@
 				34594AF41BCCE92E0000D908 /* ISSInstagramLoginViewController.h */,
 				34594AF51BCCE92E0000D908 /* ISSInstagramLoginViewController.m */,
 				34594AE51BCCE84F0000D908 /* Main.storyboard */,
+				346FE3C21BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.h */,
+				346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */,
 				346FE3B51BCE0B810003C1BC /* ISSViewImageViewController.h */,
 				346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */,
 				34594ADC1BCCE84F0000D908 /* Supporting Files */,
@@ -207,6 +212,7 @@
 				346FE3BA1BCE0D3B0003C1BC /* ISSTransitioningDelegate.m in Sources */,
 				34594B001BCCF2510000D908 /* ISSImageCollectionViewCell.m in Sources */,
 				34594AF61BCCE92E0000D908 /* ISSInstagramLoginViewController.m in Sources */,
+				346FE3C41BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m in Sources */,
 				346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */,
 				34594ADE1BCCE84F0000D908 /* main.m in Sources */,
 				34594B031BCCF4110000D908 /* ISSConstants.m in Sources */,

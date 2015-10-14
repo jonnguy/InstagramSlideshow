@@ -40,6 +40,7 @@
     } completion:^(BOOL finished) {
         [snapshotView removeFromSuperview];
         [toViewController.view setAlpha:1.0];
+        [toViewController.view setBackgroundColor:[UIColor clearColor]];
         
         [transitionContext completeTransition:finished];
     }];

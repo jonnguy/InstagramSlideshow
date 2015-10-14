@@ -10,8 +10,9 @@
 
 @interface ISSDataShare : NSObject
 
-+ (id)shared;
++ (ISSDataShare *)shared;
 
 @property (nonatomic, strong) NSString *authToken;
+@property (nonatomic, strong) NSDictionary *fetchedData;
 
 @end

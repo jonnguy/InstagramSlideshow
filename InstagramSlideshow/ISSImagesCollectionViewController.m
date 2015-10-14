@@ -10,18 +10,20 @@
 #import "ISSImageCollectionViewCell.h"
 #import "ISSTransitioningDelegate.h"
 #import "ISSViewImageViewController.h"
+#import "ISSExternalDisplayCollectionViewController.h"
 
 #import "ISSDismissalAnimator.h"
 #import "ISSPresentationAnimator.h"
 
-@interface ISSImagesCollectionViewController () <NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
+@interface ISSImagesCollectionViewController () <UIWebViewDelegate, NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
-@property (nonatomic, strong) NSDictionary *dictOfDataFromTags;
+//@property (nonatomic, strong) NSDictionary *dictOfDataFromTags;
 @property (nonatomic, strong) NSURLSession *session;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property (nonatomic, assign) CGRect openingFrame;
 
-//@property (nonatomic, strong) ISSTransitioningDelegate *transitionDelegate;
+@property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplay;
 
 @end
 
@@ -31,24 +33,64 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.externalDisplay = [[ISSExternalDisplayCollectionViewController alloc] init];
     
-    [self.collectionView registerClass:[ISSImageCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(screenDidConnect)
+                                                 name:UIScreenDidConnectNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(screenDidDisconnect)
+                                                 name:UIScreenDidDisconnectNotification
+                                               object:nil];
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
-    self.dictOfDataFromTags = [NSDictionary dictionary];
     
     self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
-//    self.transitionDelegate = [[ISSTransitioningDelegate alloc] init];
     
-    [self fetchImagesWithTag];
+    
+    // Webview stuff.. instagram..
+    NSString* authURL = [NSString stringWithFormat: @"%@?client_id=%@&redirect_uri=%@&response_type=code&scope=%@&DEBUG=True", INSTAGRAM_AUTHURL, INSTAGRAM_CLIENT_ID, INSTAGRAM_REDIRECT_URI, INSTAGRAM_SCOPE];
+    
+    [self.webView loadRequest: [NSURLRequest requestWithURL: [NSURL URLWithString: authURL]]];
+    [self.webView setDelegate:self];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark -
+#pragma mark delegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    return [self checkRequestForCallbackURL: request];
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+    [self.webView.layer removeAllAnimations];
+    self.webView.userInteractionEnabled = NO;
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [self.webView.layer removeAllAnimations];
+    self.webView.userInteractionEnabled = YES;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    [self webViewDidFinishLoad:webView];
+}
+
+#pragma My methods
 
 - (void)fetchImagesWithTag {
     NSString *reqString = [NSString stringWithFormat:@"%@%@", INSTAGRAM_APITAG, TOKEN_COMBINED];
@@ -58,7 +100,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
         if (error) {
             NSLog(@"Error: %@", error);
         } else {
-            self.dictOfDataFromTags = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            [ISSDataShare shared].fetchedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
             
             // Refresh the table once we get something
             [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
@@ -66,6 +108,50 @@ static NSString * const reuseIdentifier = @"ImageCell";
     }];
     
     [data resume];
+}
+
+
+- (BOOL)checkRequestForCallbackURL:(NSURLRequest *)request {
+    NSString* urlString = [[request URL] absoluteString];
+    if ([urlString hasPrefix: INSTAGRAM_REDIRECT_URI]) {
+        // extract and handle access token
+        NSRange range = [urlString rangeOfString: @"code="];
+        [self makePostRequest:[urlString substringFromIndex: range.location+range.length]];
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)makePostRequest:(NSString *)code {
+    
+    NSString *post = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&redirect_uri=%@&code=%@",INSTAGRAM_CLIENT_ID,INSTAGRAM_CLIENTSERCRET,INSTAGRAM_REDIRECT_URI,code];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    
+    NSMutableURLRequest *requestData = [NSMutableURLRequest requestWithURL:
+                                        [NSURL URLWithString:@"https://api.instagram.com/oauth/access_token"]];
+    [requestData setHTTPMethod:@"POST"];
+    [requestData setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [requestData setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [requestData setHTTPBody:postData];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:requestData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Error: %@", error);
+        } else {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            NSLog(@"Successfully logged in with token == %@", dict[@"access_token"]);
+            NSLog(@"Dict: %@", dict);
+            [[ISSDataShare shared] setAuthToken:dict[@"access_token"]];
+            
+            [self fetchImagesWithTag];
+            [self.webView removeFromSuperview];
+        }
+    }];
+    
+    [dataTask resume];
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -76,7 +162,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSUInteger imagesFound = [self.dictOfDataFromTags[kISSDataKey] count];
+    NSUInteger imagesFound = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
     if (imagesFound > 0) {
         NSLog(@"Returned %ld items in section", imagesFound);
         return imagesFound;
@@ -105,7 +191,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     UIImageView *recipeImageView = [[UIImageView alloc] init];
     
-    NSString *imageURL = self.dictOfDataFromTags[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
+    NSString *imageURL = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
     NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
     
@@ -149,6 +235,18 @@ static NSString * const reuseIdentifier = @"ImageCell";
     return animator;
 }
 
+#pragma mark Notifications for Screen changes
+
+- (void)screenDidConnect {
+    NSLog(@"Screen connected");
+    
+    NSArray *screens = [UIScreen screens];
+    NSLog(@"Screens: %@", screens);
+}
+
+- (void)screenDidDisconnect {
+    NSLog(@"Screen disconnected");
+}
 
 /*
  #pragma mark - Navigation

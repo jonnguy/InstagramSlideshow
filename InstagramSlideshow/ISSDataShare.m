@@ -10,13 +10,21 @@
 
 @implementation ISSDataShare
 
-+ (id)shared {
++ (ISSDataShare *)shared {
     static ISSDataShare *sharedManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedManager = [[self alloc] init];
     });
     return sharedManager;
+}
+
+- (id)init {
+    if (self = [super init]) {
+        self.fetchedData = [NSDictionary dictionary];
+        return self;
+    }
+    return nil;
 }
 
 @end
