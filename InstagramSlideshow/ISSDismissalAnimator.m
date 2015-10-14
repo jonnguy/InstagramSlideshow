@@ -11,7 +11,7 @@
 @implementation ISSDismissalAnimator
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
-    return 2.0;
+    return 1.5;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {

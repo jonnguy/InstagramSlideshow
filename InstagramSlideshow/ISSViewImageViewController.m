@@ -18,6 +18,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    // Blurr the background first:
+    [self.view setBackgroundColor:[UIColor clearColor]];
+    
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    blurEffectView.frame = self.view.bounds;
+    blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    [self.view addSubview:blurEffectView];
+    
+    // Now set the image
     NSLog(@"Image URL: %@", self.imageUrl);
     
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrl]]];
@@ -26,8 +37,10 @@
     recipeImageView.image = image;
     recipeImageView.contentMode = UIViewContentModeScaleAspectFit;
     recipeImageView.frame = self.view.bounds;
+    recipeImageView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:recipeImageView];
     
+    // Gesture recognizer to dismiss the view
     UITapGestureRecognizer *rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped)];
     [self.view addGestureRecognizer:rec];
 }

@@ -11,7 +11,7 @@
 @implementation ISSPresentationAnimator
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
-    return 2.0;
+        return 1.5;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -35,7 +35,7 @@
     [toViewController.view setAlpha:0.0];
     [containerView addSubview:toViewController.view];
     
-    [UIView animateWithDuration:animationDuration delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:1.0 options:UIViewAnimationOptionTransitionNone animations:^{
+    [UIView animateWithDuration:animationDuration delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:2.0 options:UIViewAnimationOptionTransitionNone animations:^{
         snapshotView.frame = fromViewController.view.frame;
     } completion:^(BOOL finished) {
         [snapshotView removeFromSuperview];

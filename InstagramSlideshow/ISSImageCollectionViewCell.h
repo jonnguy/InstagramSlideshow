@@ -10,7 +10,6 @@
 
 @interface ISSImageCollectionViewCell : UICollectionViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *instagramPicture;
 @property (nonatomic, strong) NSString *imageUrl;
 
 @end

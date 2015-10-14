@@ -10,13 +10,4 @@
 
 @implementation ISSImageCollectionViewCell
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self.contentView addSubview:self.instagramPicture];
-    }
-    return self;
-}
-
 @end

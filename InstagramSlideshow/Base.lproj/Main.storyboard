@@ -71,7 +71,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
-                        <color key="backgroundColor" red="0.62672785035874823" green="1" blue="0.92836430213135812" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rSE-U7-eyW">
                             <size key="itemSize" width="118" height="106"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -85,26 +85,11 @@
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="118" height="106"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="g2a-9Z-E0R">
-                                            <rect key="frame" x="8" y="8" width="102" height="90"/>
-                                            <animations/>
-                                        </imageView>
-                                    </subviews>
                                     <animations/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <animations/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.19447956667281652" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="g2a-9Z-E0R" firstAttribute="bottom" secondItem="mWh-3c-DOD" secondAttribute="bottomMargin" id="5wE-lB-cLo"/>
-                                    <constraint firstItem="g2a-9Z-E0R" firstAttribute="leading" secondItem="mWh-3c-DOD" secondAttribute="leadingMargin" id="7bk-vS-I34"/>
-                                    <constraint firstAttribute="trailingMargin" secondItem="g2a-9Z-E0R" secondAttribute="trailing" id="Age-Jo-n5k"/>
-                                    <constraint firstItem="g2a-9Z-E0R" firstAttribute="top" secondItem="mWh-3c-DOD" secondAttribute="topMargin" id="gpe-7D-1sE"/>
-                                </constraints>
-                                <connections>
-                                    <outlet property="instagramPicture" destination="g2a-9Z-E0R" id="427-IZ-Bab"/>
-                                </connections>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -121,7 +106,4 @@
             <point key="canvasLocation" x="1067" y="584"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="placeholder" width="1512" height="2016"/>
-    </resources>
 </document>

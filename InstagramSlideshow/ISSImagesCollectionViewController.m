@@ -11,12 +11,17 @@
 #import "ISSTransitioningDelegate.h"
 #import "ISSViewImageViewController.h"
 
+#import "ISSDismissalAnimator.h"
+#import "ISSPresentationAnimator.h"
+
 @interface ISSImagesCollectionViewController () <NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong) NSDictionary *dictOfDataFromTags;
 @property (nonatomic, strong) NSURLSession *session;
 
-@property (nonatomic, strong) ISSTransitioningDelegate *transitionDelegate;
+@property (nonatomic, assign) CGRect openingFrame;
+
+//@property (nonatomic, strong) ISSTransitioningDelegate *transitionDelegate;
 
 @end
 
@@ -35,7 +40,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
-    self.transitionDelegate = [[ISSTransitioningDelegate alloc] init];
+//    self.transitionDelegate = [[ISSTransitioningDelegate alloc] init];
     
     [self fetchImagesWithTag];
 }
@@ -109,12 +114,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     recipeImageView.frame = cell.bounds;
     [cell addSubview:recipeImageView];
     
-//    NSString *imageURL = self.dictOfDataFromTags[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
-//    NSLog(@"Image URL: %@", imageURL);
-//    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
-//    cell.instagramPicture.image = image;
-
-    
     return cell;
 }
 
@@ -127,16 +126,28 @@ static NSString * const reuseIdentifier = @"ImageCell";
     CGRect attributesFrame = attr.frame;
     CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];
     
-    self.transitionDelegate.openingFrame = frameToOpenFrom;
+    self.openingFrame = frameToOpenFrom;
     
     ISSViewImageViewController *vc = [[ISSViewImageViewController alloc] init];
     vc.imageUrl = cell.imageUrl;
-    vc.transitioningDelegate = self.transitioningDelegate;
+    vc.transitioningDelegate = self;
     vc.modalPresentationCapturesStatusBarAppearance = UIModalPresentationPopover;
     [self presentViewController:vc animated:YES completion:nil];
     
 }
 
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    ISSPresentationAnimator *animator = [[ISSPresentationAnimator alloc] init];
+    animator.openingFrame = self.openingFrame;
+    return animator;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    ISSDismissalAnimator *animator = [[ISSDismissalAnimator alloc] init];
+    animator.openingFrame = self.openingFrame;
+    return animator;
+}
 
 
 /*
