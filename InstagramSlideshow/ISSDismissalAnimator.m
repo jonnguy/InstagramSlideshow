@@ -11,27 +11,26 @@
 @implementation ISSDismissalAnimator
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
-    return 1.5;
+    return .75;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-//    UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey]; // Not used
+    UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *containerView = [transitionContext containerView];
     
     NSTimeInterval animationDuration = [self transitionDuration:transitionContext];
     
     UIView *snapshotView = [fromViewController.view resizableSnapshotViewFromRect:fromViewController.view.bounds afterScreenUpdates:YES withCapInsets:UIEdgeInsetsZero];
+    [containerView addSubview:toViewController.view];
     [containerView addSubview:snapshotView];
     
-    [fromViewController.view setAlpha:0.0];
+    [fromViewController.view removeFromSuperview];
     
     [UIView animateWithDuration:animationDuration animations:^{
         snapshotView.frame = self.openingFrame;
-        snapshotView.alpha = 0.0;
     } completion:^(BOOL finished) {
         [snapshotView removeFromSuperview];
-        [fromViewController.view removeFromSuperview];
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
 }

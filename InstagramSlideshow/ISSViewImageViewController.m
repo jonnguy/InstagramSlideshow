@@ -19,19 +19,27 @@
     // Do any additional setup after loading the view.
     
     // Blurr the background first:
-    [self.view setBackgroundColor:[UIColor clearColor]];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     blurEffectView.frame = self.view.bounds;
     blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    [self.view addSubview:blurEffectView];
     
     // Now set the image
     NSLog(@"Image URL: %@", self.imageUrl);
     
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrl]]];
+    
+    
+    UIImageView *backgroundImage = [[UIImageView alloc] init];
+    backgroundImage.image = image;
+    backgroundImage.contentMode = UIViewContentModeScaleToFill;
+    backgroundImage.frame = self.view.bounds;
+    [backgroundImage addSubview:blurEffectView];
+    [self.view addSubview:backgroundImage];
+    
+    
     
     UIImageView *recipeImageView = [[UIImageView alloc] init];
     recipeImageView.image = image;
@@ -60,14 +68,18 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
-*/
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

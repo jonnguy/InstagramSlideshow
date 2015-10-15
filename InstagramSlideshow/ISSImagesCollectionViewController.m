@@ -54,16 +54,16 @@ static NSString * const reuseIdentifier = @"ImageCell";
                                                  name:UIScreenDidDisconnectNotification
                                                object:nil];
     
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    
     self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
                                                   target:self
                                                 selector:@selector(tapRandomCell)
                                                 userInfo:nil
                                                  repeats:YES];
+    
+    // Uncomment the following line to preserve selection between presentations
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
     // Webview stuff.. instagram..
     NSString* authURL = [NSString stringWithFormat: @"%@?client_id=%@&redirect_uri=%@&response_type=code&scope=%@&DEBUG=True", INSTAGRAM_AUTHURL, INSTAGRAM_CLIENT_ID, INSTAGRAM_REDIRECT_URI, INSTAGRAM_SCOPE];
@@ -163,7 +163,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
             NSLog(@"Dict: %@", dict);
             [[ISSDataShare shared] setAuthToken:dict[@"access_token"]];
             
-            [self.webView removeFromSuperview];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.webView removeFromSuperview];
+            });
             
             [self fetchImagesWithTag];
         }
@@ -180,7 +182,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
     int row = arc4random() % size;
     NSLog(@"Selecting indexpath: %@", [NSIndexPath indexPathForRow:row inSection:0]);
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+//        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        // This is so gross, but it works.
+        [self collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
     });
 }
 
