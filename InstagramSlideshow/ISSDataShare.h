@@ -14,5 +14,7 @@
 
 @property (nonatomic, strong) NSString *authToken;
 @property (nonatomic, strong) NSDictionary *fetchedData;
+@property (nonatomic, strong) NSMutableDictionary *filteredData; // This is a custom dictionary from the fetched data so I don't have to mess with the huge JSON they send us.
+@property (nonatomic, strong) NSCache *cachedPhotos;
 
 @end

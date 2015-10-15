@@ -9,8 +9,14 @@
 #import "ISSConstants.h"
 
 // Keys for Instagram dictionary
-NSString * const kISSImagesKey = @"images";
-NSString * const kISSStandardResolutionKey = @"standard_resolution";
-NSString * const kISSThumbnailKey = @"thumbnail";
-NSString * const kISSURLKey = @"url";
-NSString * const kISSDataKey = @"data";
+NSString * const kISSImagesKey              = @"images";
+NSString * const kISSStandardResolutionKey  = @"standard_resolution";
+NSString * const kISSThumbnailKey           = @"thumbnail";
+NSString * const kISSURLKey                 = @"url";
+NSString * const kISSDataKey                = @"data";
+NSString * const kISSIDKey                  = @"id";
+NSString * const kISSCaptionKey             = @"caption";
+NSString * const kISSTextKey                = @"text";
+NSString * const kISSFromKey                = @"from";
+NSString * const kISSFullNameKey            = @"full_name";
+NSString * const kISSUsernameKey            = @"username";

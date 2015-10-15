@@ -18,6 +18,7 @@
 @interface ISSExternalDisplayCollectionViewController () <UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, assign) CGRect openingFrame;
+@property (nonatomic, strong) NSTimer *timer;
 
 @end
 
@@ -31,15 +32,38 @@ static NSString * const reuseIdentifier = @"ImageCell";
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
     
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                  target:self
+                                                selector:@selector(tapRandomCell)
+                                                userInfo:nil
+                                                 repeats:YES];
+    
     // Register cell classes
     [self.collectionView registerClass:[ISSImageCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
     // Do any additional setup after loading the view.
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+
+- (void)tapRandomCell {
+    NSUInteger size = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
+    if (!size) {
+        return;
+    }
+    int row = arc4random() % size;
+    NSLog(@"Selecting indexpath: %@", [NSIndexPath indexPathForRow:row inSection:0]);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        // This is so gross, but it works.
+        [self collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
+    });
 }
 
 /*
@@ -70,7 +94,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(90.f, 90.f);
+    return CGSizeMake(120.f, 120.f);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {

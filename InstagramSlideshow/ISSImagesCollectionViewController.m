@@ -114,16 +114,66 @@ static NSString * const reuseIdentifier = @"ImageCell";
         } else {
             [ISSDataShare shared].fetchedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
             
+            [self cacheImagesFromInstagram];
+            
             // Refresh the table once we get something
             [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.timer fire];
-            });
         }
     }];
     
     [data resume];
+}
+
+- (void)cacheImagesFromInstagram {
+    NSArray *photosArray = [ISSDataShare shared].fetchedData[kISSDataKey];
+    
+    [photosArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        // (NSString *) Images is the URL of the image, not the actual image
+        dict[kISSImagesKey] = photosArray[idx][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
+        
+        // (NSString *) Caption of the picture in plain text
+        dict[kISSCaptionKey] = photosArray[idx][kISSCaptionKey][kISSTextKey];
+        
+        // (NSString *) Name of the poster
+        dict[kISSFullNameKey] = photosArray[idx][kISSFromKey][kISSFullNameKey];
+        
+        // (NSString *) Username of the poster
+        dict[kISSUsernameKey] = photosArray[idx][kISSFromKey][kISSUsernameKey];
+        
+        // Now we should set the ID key in the dictionary to our newly formed dictionary.. This should be safe, right?
+        NSString *photoID = photosArray[idx][kISSIDKey];
+        [ISSDataShare shared].filteredData[photoID] = dict;
+        
+        // Cache images
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSURL *imageURL = [NSURL URLWithString:dict[kISSImagesKey]];
+            UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:imageURL]];
+            
+            if (image) {
+                // If we get an image, we should cache it!
+                [[ISSDataShare shared].cachedPhotos setObject:image forKey:kISSIDKey];
+                
+                NSLog(@"Reloading :%@", [NSIndexPath indexPathForRow:idx inSection:0]);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]]];
+                });
+            } else {
+                NSLog(@"We didn't get an image for %@", imageURL);
+            }
+        });
+        
+//        // Now to cache our images..
+//        NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:dict[kISSImagesKey]]];
+//        NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//            if (error) {
+//                NSLog(@"Error fetching %@. %@", dict[kISSImagesKey], error.localizedDescription);
+//            } else {
+//                UIImage
+//            }
+//            
+//        }];
+    }];
 }
 
 
@@ -206,7 +256,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(90.f, 90.f);
+    CGFloat oneThird = self.view.frame.size.width / 6;
+    return CGSizeMake(oneThird, oneThird);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
@@ -228,11 +279,16 @@ static NSString * const reuseIdentifier = @"ImageCell";
     NSString *imageURL = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
     NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
-    
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
     recipeImageView.image = image;
     recipeImageView.frame = cell.bounds;
     [cell addSubview:recipeImageView];
+    
+//    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+//    UIImage *igImage = [[ISSDataShare shared].cachedPhotos objectForKey:photoID];
+//    recipeImageView.image = igImage;
+//    recipeImageView.frame = cell.bounds;
+//    [cell addSubview:recipeImageView];
     
     return cell;
 }
@@ -279,7 +335,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     self.externalScreen = screens[1];
     self.availableModes = [self.externalScreen availableModes];
+    self.externalDisplayViewController.view.frame = self.externalWindow.bounds;
     
+    [self.externalWindow setHidden:NO];
     [self.externalWindow setScreen:self.externalScreen];
     [self.externalWindow addSubview:self.externalDisplayViewController.view];
     
@@ -287,6 +345,10 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)screenDidDisconnect:(NSNotification *)not {
     NSLog(@"Screen disconnected");
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 /*
