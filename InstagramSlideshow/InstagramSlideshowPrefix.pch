@@ -28,6 +28,7 @@
 
 #import "ISSConstants.h"
 #import "ISSDataShare.h"
+#import "UIImageView+WebCache.h"
 #import <UIKit/UIKit.h>
 
 #endif /* InstagramSlideshowPrefix_pch */

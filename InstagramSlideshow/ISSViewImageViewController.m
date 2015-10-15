@@ -31,7 +31,6 @@
     
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrl]]];
     
-    
     UIImageView *backgroundImage = [[UIImageView alloc] init];
     backgroundImage.image = image;
     backgroundImage.contentMode = UIViewContentModeScaleToFill;
@@ -39,10 +38,8 @@
     [backgroundImage addSubview:blurEffectView];
     [self.view addSubview:backgroundImage];
     
-    
-    
     UIImageView *recipeImageView = [[UIImageView alloc] init];
-    recipeImageView.image = image;
+    [recipeImageView sd_setImageWithURL:[NSURL URLWithString:self.imageUrl]];
     recipeImageView.contentMode = UIViewContentModeScaleAspectFit;
     recipeImageView.frame = self.view.bounds;
     recipeImageView.backgroundColor = [UIColor clearColor];
@@ -56,7 +53,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self performSelector:@selector(viewTapped) withObject:nil afterDelay:2.0];
+    [self performSelector:@selector(viewTapped) withObject:nil afterDelay:3.0];
 }
 
 - (void)didReceiveMemoryWarning {

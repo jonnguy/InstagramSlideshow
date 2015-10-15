@@ -12,6 +12,7 @@
 #import "ISSViewImageViewController.h"
 #import "ISSExternalDisplayCollectionViewController.h"
 
+
 #import "ISSDismissalAnimator.h"
 #import "ISSPresentationAnimator.h"
 
@@ -54,12 +55,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
                                                  name:UIScreenDidDisconnectNotification
                                                object:nil];
     
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
-                                                  target:self
-                                                selector:@selector(tapRandomCell)
-                                                userInfo:nil
-                                                 repeats:YES];
-    
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -74,6 +69,16 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    [self startTimer];
+}
+
+- (void)startTimer {
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:3.0
+                                                  target:self
+                                                selector:@selector(tapRandomCell)
+                                                userInfo:nil
+                                                 repeats:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -116,6 +121,11 @@ static NSString * const reuseIdentifier = @"ImageCell";
             
             [self cacheImagesFromInstagram];
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.webView setHidden:YES];
+                [self.webView removeFromSuperview];
+            });
+            
             // Refresh the table once we get something
             [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
         }
@@ -145,23 +155,23 @@ static NSString * const reuseIdentifier = @"ImageCell";
         NSString *photoID = photosArray[idx][kISSIDKey];
         [ISSDataShare shared].filteredData[photoID] = dict;
         
-        // Cache images
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSURL *imageURL = [NSURL URLWithString:dict[kISSImagesKey]];
-            UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:imageURL]];
-            
-            if (image) {
-                // If we get an image, we should cache it!
-                [[ISSDataShare shared].cachedPhotos setObject:image forKey:kISSIDKey];
-                
-                NSLog(@"Reloading :%@", [NSIndexPath indexPathForRow:idx inSection:0]);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]]];
-                });
-            } else {
-                NSLog(@"We didn't get an image for %@", imageURL);
-            }
-        });
+//        // Cache images
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//            NSURL *imageURL = [NSURL URLWithString:dict[kISSImagesKey]];
+//            UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:imageURL]];
+//            
+//            if (image) {
+//                // If we get an image, we should cache it!
+//                [[ISSDataShare shared].cachedPhotos setObject:image forKey:kISSIDKey];
+//                
+//                NSLog(@"Reloading :%@", [NSIndexPath indexPathForRow:idx inSection:0]);
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]]];
+//                });
+//            } else {
+//                NSLog(@"We didn't get an image for %@", imageURL);
+//            }
+//        });
         
 //        // Now to cache our images..
 //        NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:dict[kISSImagesKey]]];
@@ -225,6 +235,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (void)tapRandomCell {
+    [self.timer invalidate];
     NSUInteger size = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
     if (!size) {
         return;
@@ -232,7 +243,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     int row = arc4random() % size;
     NSLog(@"Selecting indexpath: %@", [NSIndexPath indexPathForRow:row inSection:0]);
     dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
         // This is so gross, but it works.
         [self collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
     });
@@ -279,8 +289,10 @@ static NSString * const reuseIdentifier = @"ImageCell";
     NSString *imageURL = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
     NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
-    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
-    recipeImageView.image = image;
+//    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
+//    recipeImageView.image = image;
+    
+    [recipeImageView sd_setImageWithURL:[NSURL URLWithString:imageURL]];
     recipeImageView.frame = cell.bounds;
     [cell addSubview:recipeImageView];
     

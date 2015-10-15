@@ -23,7 +23,6 @@
     if (self = [super init]) {
         self.fetchedData = [NSDictionary dictionary];
         self.filteredData = [NSMutableDictionary dictionary];
-        self.cachedPhotos = [[NSCache alloc] init];
         return self;
     }
     return nil;
