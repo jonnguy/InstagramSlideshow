@@ -17,6 +17,7 @@
 
 @interface ISSExternalDisplayCollectionViewController () <UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
+@property (nonatomic, strong) UIStoryboard *mainStoryboard;
 @property (nonatomic, assign) CGRect openingFrame;
 @property (nonatomic, strong) NSTimer *timer;
 
@@ -28,6 +29,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -125,14 +128,18 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
+    if (!cell) {
+        return;
+    }
     UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
     CGRect attributesFrame = attr.frame;
     CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];
     
     self.openingFrame = frameToOpenFrom;
     
-    ISSViewImageViewController *vc = [[ISSViewImageViewController alloc] init];
-    vc.imageUrl = cell.imageUrl;
+    ISSViewImageViewController *vc = (ISSViewImageViewController *)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"viewImageVC"];
+    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+    vc.imageID = photoID;
     vc.transitioningDelegate = self;
     vc.modalPresentationCapturesStatusBarAppearance = UIModalPresentationPopover;
     [self presentViewController:vc animated:YES completion:nil];

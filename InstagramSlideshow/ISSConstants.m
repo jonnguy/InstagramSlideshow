@@ -20,3 +20,6 @@ NSString * const kISSTextKey                = @"text";
 NSString * const kISSFromKey                = @"from";
 NSString * const kISSFullNameKey            = @"full_name";
 NSString * const kISSUsernameKey            = @"username";
+NSString * const kISSProfilePictureKey      = @"profile_picture";
+NSString * const kISSLikesKey               = @"likes";
+NSString * const kISSCountKey               = @"count";

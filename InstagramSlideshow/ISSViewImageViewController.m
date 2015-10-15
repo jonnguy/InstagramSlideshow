@@ -10,6 +10,14 @@
 
 @interface ISSViewImageViewController ()
 
+@property (nonatomic, strong) NSDictionary *userDictionary;
+
+@property (weak, nonatomic) IBOutlet UIImageView *profilePictureImageView;
+@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
+@property (weak, nonatomic) IBOutlet UILabel *likesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
+
 @end
 
 @implementation ISSViewImageViewController
@@ -18,33 +26,57 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    // Blurr the background first:
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    self.userDictionary = [ISSDataShare shared].filteredData[self.imageID];
     
+    [self.view setAlpha:1.0];
+    
+    
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     blurEffectView.frame = self.view.bounds;
     blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+
     // Now set the image
 //    NSLog(@"Image URL: %@", self.imageUrl);
-    
-    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrl]]];
-    
+
+    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.userDictionary[kISSImagesKey]]]];
+
     UIImageView *backgroundImage = [[UIImageView alloc] init];
     backgroundImage.image = image;
     backgroundImage.contentMode = UIViewContentModeScaleToFill;
     backgroundImage.frame = self.view.bounds;
     [backgroundImage addSubview:blurEffectView];
-    [self.view addSubview:backgroundImage];
+    [self.view insertSubview:backgroundImage atIndex:0];
     
-    UIImageView *recipeImageView = [[UIImageView alloc] init];
-    [recipeImageView sd_setImageWithURL:[NSURL URLWithString:self.imageUrl]];
-    recipeImageView.contentMode = UIViewContentModeScaleAspectFit;
-    recipeImageView.frame = self.view.bounds;
-    recipeImageView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:recipeImageView];
+    // Profile picture image
+    self.profilePictureImageView.layer.cornerRadius = self.profilePictureImageView.frame.size.width / 1.5;
+//    self.profilePictureImageView.layer.borderWidth = 0;
+    self.profilePictureImageView.clipsToBounds = YES;
+    NSString *imageURL = self.userDictionary[kISSProfilePictureKey];
+    self.profilePictureImageView.backgroundColor = [UIColor whiteColor];
+    [self.profilePictureImageView sd_setImageWithURL:[NSURL URLWithString:imageURL]];
     
+    // Username
+    self.usernameLabel.bounds = CGRectInset(self.usernameLabel.frame, 10.0f, 10.0f);
+    self.usernameLabel.text = self.userDictionary[kISSUsernameKey];
+    
+    // Main image
+    NSString *mainImageURL = self.userDictionary[kISSImagesKey];
+    [self.mainImageView sd_setImageWithURL:[NSURL URLWithString:mainImageURL]];
+    
+    // Likes label
+    NSInteger likes = [self.userDictionary[kISSLikesKey] integerValue];
+    if (likes == 1) {
+        self.likesLabel.text = [NSString stringWithFormat:@"%ld like", likes];
+    } else {
+        self.likesLabel.text = [NSString stringWithFormat:@"%ld likes", likes];
+    }
+    
+    // Comment label
+    self.commentLabel.text = [NSString stringWithFormat:@"%@ %@", self.userDictionary[kISSUsernameKey], self.userDictionary[kISSCaptionKey]];
+
     // Gesture recognizer to dismiss the view
     UITapGestureRecognizer *rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped)];
     [self.view addGestureRecognizer:rec];

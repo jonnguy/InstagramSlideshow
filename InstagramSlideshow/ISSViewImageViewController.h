@@ -10,6 +10,6 @@
 
 @interface ISSViewImageViewController : UIViewController
 
-@property (nonatomic, strong) NSString *imageUrl;
+@property (nonatomic, strong) NSString *imageID;
 
 @end

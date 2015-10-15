@@ -18,8 +18,8 @@
 
 @interface ISSImagesCollectionViewController () <UIWebViewDelegate, NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate, UIPickerViewDelegate>
 
-//@property (nonatomic, strong) NSDictionary *dictOfDataFromTags;
 @property (nonatomic, strong) UIStoryboard *mainStoryboard;
+@property (nonatomic, strong) NSMutableArray *imagesBeingUsed;
 @property (nonatomic, strong) NSURLSession *session;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
@@ -149,10 +149,15 @@ static NSString * const reuseIdentifier = @"ImageCell";
         dict[kISSCaptionKey] = photosArray[idx][kISSCaptionKey][kISSTextKey];
         
         // (NSString *) Name of the poster
-        dict[kISSFullNameKey] = photosArray[idx][kISSFromKey][kISSFullNameKey];
+        dict[kISSFullNameKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSFullNameKey];
         
         // (NSString *) Username of the poster
-        dict[kISSUsernameKey] = photosArray[idx][kISSFromKey][kISSUsernameKey];
+        dict[kISSUsernameKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSUsernameKey];
+        
+        // (NSString *) Profile picture of poster
+        dict[kISSProfilePictureKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey];
+        
+        dict[kISSLikesKey] = photosArray[idx][kISSLikesKey][kISSCountKey];
         
         // Now we should set the ID key in the dictionary to our newly formed dictionary.. This should be safe, right?
         NSString *photoID = photosArray[idx][kISSIDKey];
@@ -282,7 +287,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
     self.openingFrame = frameToOpenFrom;
     
     ISSViewImageViewController *vc = (ISSViewImageViewController *)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"viewImageVC"];
-    vc.imageUrl = cell.imageUrl;
+    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+    vc.imageID = photoID;
     vc.transitioningDelegate = self;
     vc.modalPresentationCapturesStatusBarAppearance = UIModalPresentationPopover;
     [self presentViewController:vc animated:YES completion:nil];

@@ -19,3 +19,6 @@ extern NSString * const kISSTextKey;
 extern NSString * const kISSFromKey;
 extern NSString * const kISSFullNameKey;
 extern NSString * const kISSUsernameKey;
+extern NSString * const kISSProfilePictureKey;
+extern NSString * const kISSLikesKey;
+extern NSString * const kISSCountKey;
