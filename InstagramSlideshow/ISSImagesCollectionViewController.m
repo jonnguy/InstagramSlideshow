@@ -19,6 +19,7 @@
 @interface ISSImagesCollectionViewController () <UIWebViewDelegate, NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate, UIPickerViewDelegate>
 
 //@property (nonatomic, strong) NSDictionary *dictOfDataFromTags;
+@property (nonatomic, strong) UIStoryboard *mainStoryboard;
 @property (nonatomic, strong) NSURLSession *session;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
@@ -39,6 +40,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
     UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     [aFlowLayout setItemSize:CGSizeMake(200, 140)];
@@ -278,7 +281,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     self.openingFrame = frameToOpenFrom;
     
-    ISSViewImageViewController *vc = [[ISSViewImageViewController alloc] init];
+    ISSViewImageViewController *vc = (ISSViewImageViewController *)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"viewImageVC"];
     vc.imageUrl = cell.imageUrl;
     vc.transitioningDelegate = self;
     vc.modalPresentationCapturesStatusBarAppearance = UIModalPresentationPopover;

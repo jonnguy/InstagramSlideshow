@@ -44,6 +44,25 @@
             </objects>
             <point key="canvasLocation" x="797" y="-181"/>
         </scene>
+        <!--View Image View Controller-->
+        <scene sceneID="qr0-hE-h3z">
+            <objects>
+                <viewController storyboardIdentifier="viewImageVC" id="ga1-DU-CfP" customClass="ISSViewImageViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="26w-K6-4vc"/>
+                        <viewControllerLayoutGuide type="bottom" id="Fnp-9c-WeQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7n9-LA-qkk">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZRL-vF-iun" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1482" y="516"/>
+        </scene>
         <!--Images Collection View Controller-->
         <scene sceneID="YvL-XJ-rog">
             <objects>
