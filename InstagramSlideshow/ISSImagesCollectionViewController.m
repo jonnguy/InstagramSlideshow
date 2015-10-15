@@ -154,35 +154,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
         // Now we should set the ID key in the dictionary to our newly formed dictionary.. This should be safe, right?
         NSString *photoID = photosArray[idx][kISSIDKey];
         [ISSDataShare shared].filteredData[photoID] = dict;
-        
-//        // Cache images
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//            NSURL *imageURL = [NSURL URLWithString:dict[kISSImagesKey]];
-//            UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:imageURL]];
-//            
-//            if (image) {
-//                // If we get an image, we should cache it!
-//                [[ISSDataShare shared].cachedPhotos setObject:image forKey:kISSIDKey];
-//                
-//                NSLog(@"Reloading :%@", [NSIndexPath indexPathForRow:idx inSection:0]);
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]]];
-//                });
-//            } else {
-//                NSLog(@"We didn't get an image for %@", imageURL);
-//            }
-//        });
-        
-//        // Now to cache our images..
-//        NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:dict[kISSImagesKey]]];
-//        NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-//            if (error) {
-//                NSLog(@"Error fetching %@. %@", dict[kISSImagesKey], error.localizedDescription);
-//            } else {
-//                UIImage
-//            }
-//            
-//        }];
     }];
 }
 
@@ -241,7 +212,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
         return;
     }
     int row = arc4random() % size;
-    NSLog(@"Selecting indexpath: %@", [NSIndexPath indexPathForRow:row inSection:0]);
     dispatch_async(dispatch_get_main_queue(), ^{
         // This is so gross, but it works.
         [self collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
@@ -282,32 +252,20 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCell" forIndexPath:indexPath];
     
-    NSLog(@"Cell: %@", cell);
-    
     UIImageView *recipeImageView = [[UIImageView alloc] init];
     
     NSString *imageURL = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
-    NSLog(@"Image URL: %@", imageURL);
+//    NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
-//    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
-//    recipeImageView.image = image;
     
     [recipeImageView sd_setImageWithURL:[NSURL URLWithString:imageURL]];
     recipeImageView.frame = cell.bounds;
     [cell addSubview:recipeImageView];
     
-//    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
-//    UIImage *igImage = [[ISSDataShare shared].cachedPhotos objectForKey:photoID];
-//    recipeImageView.image = igImage;
-//    recipeImageView.frame = cell.bounds;
-//    [cell addSubview:recipeImageView];
-    
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Did select at: %@", indexPath);
-    
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
     UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
