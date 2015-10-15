@@ -39,6 +39,7 @@
 		346FE3F81BCF57A70003C1BC /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3E61BCF57A70003C1BC /* UIImageView+HighlightedWebCache.m */; };
 		346FE3F91BCF57A70003C1BC /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3E81BCF57A70003C1BC /* UIImageView+WebCache.m */; };
 		346FE3FA1BCF57A70003C1BC /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3EA1BCF57A70003C1BC /* UIView+WebCacheOperation.m */; };
+		34870D611BD00F2C009482DA /* ISSCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 34870D601BD00F2C009482DA /* ISSCategories.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,8 @@
 		346FE3E81BCF57A70003C1BC /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		346FE3E91BCF57A70003C1BC /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		346FE3EA1BCF57A70003C1BC /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		34870D5F1BD00F2C009482DA /* ISSCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSCategories.h; sourceTree = "<group>"; };
+		34870D601BD00F2C009482DA /* ISSCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSCategories.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +145,8 @@
 				34594AE01BCCE84F0000D908 /* ISSAppDelegate.m */,
 				34594B011BCCF4110000D908 /* ISSConstants.h */,
 				34594B021BCCF4110000D908 /* ISSConstants.m */,
+				34870D5F1BD00F2C009482DA /* ISSCategories.h */,
+				34870D601BD00F2C009482DA /* ISSCategories.m */,
 				34594AFB1BCCEBE00000D908 /* ISSDataShare.h */,
 				34594AFC1BCCEBE00000D908 /* ISSDataShare.m */,
 				34594AFE1BCCF2510000D908 /* ISSImageCollectionViewCell.h */,
@@ -315,6 +320,7 @@
 				346FE3F21BCF57A70003C1BC /* SDWebImageManager.m in Sources */,
 				346FE3F01BCF57A70003C1BC /* SDWebImageDownloader.m in Sources */,
 				346FE3F91BCF57A70003C1BC /* UIImageView+WebCache.m in Sources */,
+				34870D611BD00F2C009482DA /* ISSCategories.m in Sources */,
 				346FE3F81BCF57A70003C1BC /* UIImageView+HighlightedWebCache.m in Sources */,
 				346FE3EB1BCF57A70003C1BC /* MKAnnotationView+WebCache.m in Sources */,
 				346FE3F51BCF57A70003C1BC /* UIImage+GIF.m in Sources */,

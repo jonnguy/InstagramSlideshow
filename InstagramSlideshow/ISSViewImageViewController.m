@@ -80,7 +80,7 @@
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: self.commentLabel.attributedText];
     NSRange rangeOfSpace = [self.commentLabel.text rangeOfString:@" "];
     [text addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(rangeOfSpace.location, text.length-rangeOfSpace.location)];
-    [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:19.0] range:NSMakeRange(rangeOfSpace.location, text.length-rangeOfSpace.location)];
+    [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18.0] range:NSMakeRange(rangeOfSpace.location, text.length-rangeOfSpace.location)];
     
     [self.commentLabel setAttributedText: text];
 

@@ -157,7 +157,10 @@ static NSString * const reuseIdentifier = @"ImageCell";
         // (NSString *) Profile picture of poster
         dict[kISSProfilePictureKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey];
         
+        // (NSNumber *) Number of likes.. get integerValue of it.
         dict[kISSLikesKey] = photosArray[idx][kISSLikesKey][kISSCountKey];
+        
+        [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey]] options:0 progress:nil completed:nil];
         
         // Now we should set the ID key in the dictionary to our newly formed dictionary.. This should be safe, right?
         NSString *photoID = photosArray[idx][kISSIDKey];
