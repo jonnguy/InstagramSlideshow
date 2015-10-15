@@ -27,7 +27,7 @@
     blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     // Now set the image
-    NSLog(@"Image URL: %@", self.imageUrl);
+//    NSLog(@"Image URL: %@", self.imageUrl);
     
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrl]]];
     

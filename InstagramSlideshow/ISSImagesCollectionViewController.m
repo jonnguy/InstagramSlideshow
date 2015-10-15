@@ -107,7 +107,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
     [self webViewDidFinishLoad:webView];
 }
 
-#pragma My methods
+#pragma mark My methods
 
 - (void)fetchImagesWithTag {
     NSString *reqString = [NSString stringWithFormat:@"%@%@", INSTAGRAM_APITAG, TOKEN_COMBINED];
@@ -241,7 +241,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(10.0, 5.0, 0.0, 5.0);
+    return UIEdgeInsetsMake(20.0, 10.0, 0.0, 10.0);
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -250,11 +250,12 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCell" forIndexPath:indexPath];
+    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     UIImageView *recipeImageView = [[UIImageView alloc] init];
     
-    NSString *imageURL = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
+    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+    NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];
 //    NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
     
@@ -268,6 +269,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
+    if (!cell) {
+        return;
+    }
     UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
     CGRect attributesFrame = attr.frame;
     CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];

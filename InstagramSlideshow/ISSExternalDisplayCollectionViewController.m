@@ -109,16 +109,13 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCell" forIndexPath:indexPath];
     
-    NSLog(@"Cell: %@", cell);
-    
     UIImageView *recipeImageView = [[UIImageView alloc] init];
     
     NSString *imageURL = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
-    NSLog(@"Image URL: %@", imageURL);
+    //    NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
     
-    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
-    recipeImageView.image = image;
+    [recipeImageView sd_setImageWithURL:[NSURL URLWithString:imageURL]];
     recipeImageView.frame = cell.bounds;
     [cell addSubview:recipeImageView];
     
@@ -126,8 +123,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Did select at: %@", indexPath);
-    
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
     UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
