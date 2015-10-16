@@ -48,18 +48,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     self.externalDisplayViewController = [[ISSExternalDisplayCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
     self.externalWindow = [[UIWindow alloc] init];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(screenDidConnect:)
-                                                 name:UIScreenDidConnectNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(screenDidDisconnect:)
-                                                 name:UIScreenDidDisconnectNotification
-                                               object:nil];
-    
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
     self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
     // Webview stuff.. instagram..
@@ -306,28 +294,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     ISSDismissalAnimator *animator = [[ISSDismissalAnimator alloc] init];
     animator.openingFrame = self.openingFrame;
     return animator;
-}
-
-#pragma mark Notifications for Screen changes
-
-//- (void)screenDidConnect:(NSNotification *)not {
-//    NSLog(@"Screen connected");
-//    
-//    NSArray *screens = [UIScreen screens];
-//    NSLog(@"Screens: %@", screens);
-//    
-//    self.externalScreen = screens[1];
-//    self.availableModes = [self.externalScreen availableModes];
-//    self.externalDisplayViewController.view.frame = self.externalWindow.bounds;
-//    
-//    [self.externalWindow setHidden:NO];
-//    [self.externalWindow setScreen:self.externalScreen];
-//    [self.externalWindow addSubview:self.externalDisplayViewController.view];
-//    
-//}
-
-- (void)screenDidDisconnect:(NSNotification *)not {
-    NSLog(@"Screen disconnected");
 }
 
 - (BOOL)prefersStatusBarHidden {
