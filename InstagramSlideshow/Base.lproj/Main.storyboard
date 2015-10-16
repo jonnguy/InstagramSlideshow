@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B26" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="mIQ-Qi-lHS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="mIQ-Qi-lHS">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
@@ -44,7 +44,74 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ffd-rb-gDI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="797" y="-181"/>
+            <point key="canvasLocation" x="434" y="-207"/>
+        </scene>
+        <!--Text Field View Controller-->
+        <scene sceneID="pho-ID-1qc">
+            <objects>
+                <viewController id="8ZD-Wq-Aja" customClass="ISSTextFieldViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QtH-z7-hgz"/>
+                        <viewControllerLayoutGuide type="bottom" id="d7x-qq-Fjm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="oUa-gk-NM8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yNc-uV-9Fd">
+                                <rect key="frame" x="225" y="40" width="150" height="30"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="Gck-hU-GUW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="poW-nR-rf2">
+                                <rect key="frame" x="246" y="77" width="108" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Tap this to save"/>
+                                <connections>
+                                    <action selector="tappedButton:" destination="8ZD-Wq-Aja" eventType="touchUpInside" id="G1J-93-MRw"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOI-tj-aSt">
+                                <rect key="frame" x="281" y="561" width="39" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Close"/>
+                                <connections>
+                                    <action selector="close:" destination="8ZD-Wq-Aja" eventType="touchUpInside" id="dGF-O8-R9h"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="d7x-qq-Fjm" firstAttribute="top" secondItem="jOI-tj-aSt" secondAttribute="bottom" constant="8" id="Mro-Wo-4FJ"/>
+                            <constraint firstItem="yNc-uV-9Fd" firstAttribute="centerY" secondItem="oUa-gk-NM8" secondAttribute="centerY" id="RnJ-GX-PTX"/>
+                            <constraint firstItem="yNc-uV-9Fd" firstAttribute="top" secondItem="QtH-z7-hgz" secondAttribute="bottom" constant="40" id="SkV-3t-Yvl"/>
+                            <constraint firstItem="poW-nR-rf2" firstAttribute="top" secondItem="yNc-uV-9Fd" secondAttribute="top" id="bf1-85-Mr8"/>
+                            <constraint firstItem="poW-nR-rf2" firstAttribute="centerX" secondItem="yNc-uV-9Fd" secondAttribute="centerX" id="hLJ-a9-f37"/>
+                            <constraint firstItem="yNc-uV-9Fd" firstAttribute="centerX" secondItem="oUa-gk-NM8" secondAttribute="centerX" id="kGO-Cn-JiT"/>
+                            <constraint firstItem="jOI-tj-aSt" firstAttribute="centerX" secondItem="oUa-gk-NM8" secondAttribute="centerX" id="rLP-SC-jEn"/>
+                            <constraint firstItem="poW-nR-rf2" firstAttribute="top" secondItem="yNc-uV-9Fd" secondAttribute="bottom" constant="7" id="uvR-3d-Uhu"/>
+                            <constraint firstItem="poW-nR-rf2" firstAttribute="centerX" secondItem="oUa-gk-NM8" secondAttribute="centerX" id="yca-yB-Ve8"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="RnJ-GX-PTX"/>
+                                <exclude reference="bf1-85-Mr8"/>
+                                <exclude reference="hLJ-a9-f37"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="tokenTextField" destination="yNc-uV-9Fd" id="0ip-pK-6GO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F68-LU-arH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1234" y="-5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="qr0-hE-h3z">
@@ -149,7 +216,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZRL-vF-iun" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1233" y="523"/>
+            <point key="canvasLocation" x="1362" y="803"/>
         </scene>
         <!--View Image View Controller-->
         <scene sceneID="vF4-wf-TGq">
@@ -290,7 +357,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y6O-nl-U3S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1959" y="60"/>
+            <point key="canvasLocation" x="2095" y="160"/>
         </scene>
         <!--Images Collection View Controller-->
         <scene sceneID="YvL-XJ-rog">
@@ -333,6 +400,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="webView" destination="0RV-dv-keZ" id="vYS-Us-4jB"/>
+                        <segue destination="8ZD-Wq-Aja" kind="show" identifier="showTextField" id="JFg-27-sjr"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7qo-vq-7tP" userLabel="First Responder" sceneMemberID="firstResponder"/>

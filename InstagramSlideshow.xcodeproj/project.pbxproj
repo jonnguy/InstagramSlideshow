@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		345908801BD0CC9700DCBDD4 /* ISSTextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459087F1BD0CC9700DCBDD4 /* ISSTextFieldViewController.m */; };
+		345908891BD0DC3400DCBDD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 345908881BD0DC3400DCBDD4 /* main.m */; };
+		3459088C1BD0DC3400DCBDD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459088B1BD0DC3400DCBDD4 /* AppDelegate.m */; };
+		3459088F1BD0DC3400DCBDD4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459088E1BD0DC3400DCBDD4 /* ViewController.m */; };
+		345908921BD0DC3400DCBDD4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 345908901BD0DC3400DCBDD4 /* Main.storyboard */; };
+		345908941BD0DC3400DCBDD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 345908931BD0DC3400DCBDD4 /* Assets.xcassets */; };
+		345908971BD0DC3400DCBDD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 345908951BD0DC3400DCBDD4 /* LaunchScreen.storyboard */; };
 		34594ADE1BCCE84F0000D908 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34594ADD1BCCE84F0000D908 /* main.m */; };
 		34594AE11BCCE84F0000D908 /* ISSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34594AE01BCCE84F0000D908 /* ISSAppDelegate.m */; };
 		34594AE71BCCE84F0000D908 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34594AE51BCCE84F0000D908 /* Main.storyboard */; };
@@ -43,6 +50,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3459087E1BD0CC9700DCBDD4 /* ISSTextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSTextFieldViewController.h; sourceTree = "<group>"; };
+		3459087F1BD0CC9700DCBDD4 /* ISSTextFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSTextFieldViewController.m; sourceTree = "<group>"; };
+		345908851BD0DC3400DCBDD4 /* JustAuth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JustAuth.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		345908881BD0DC3400DCBDD4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3459088A1BD0DC3400DCBDD4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3459088B1BD0DC3400DCBDD4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3459088D1BD0DC3400DCBDD4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		3459088E1BD0DC3400DCBDD4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		345908911BD0DC3400DCBDD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		345908931BD0DC3400DCBDD4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		345908961BD0DC3400DCBDD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		345908981BD0DC3400DCBDD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34594AD91BCCE84F0000D908 /* InstagramSlideshow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramSlideshow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34594ADD1BCCE84F0000D908 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		34594ADF1BCCE84F0000D908 /* ISSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISSAppDelegate.h; sourceTree = "<group>"; };
@@ -110,6 +129,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		345908821BD0DC3400DCBDD4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34594AD61BCCE84F0000D908 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -120,10 +146,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		345908861BD0DC3400DCBDD4 /* JustAuth */ = {
+			isa = PBXGroup;
+			children = (
+				3459088A1BD0DC3400DCBDD4 /* AppDelegate.h */,
+				3459088B1BD0DC3400DCBDD4 /* AppDelegate.m */,
+				3459088D1BD0DC3400DCBDD4 /* ViewController.h */,
+				3459088E1BD0DC3400DCBDD4 /* ViewController.m */,
+				345908901BD0DC3400DCBDD4 /* Main.storyboard */,
+				345908931BD0DC3400DCBDD4 /* Assets.xcassets */,
+				345908951BD0DC3400DCBDD4 /* LaunchScreen.storyboard */,
+				345908981BD0DC3400DCBDD4 /* Info.plist */,
+				345908871BD0DC3400DCBDD4 /* Supporting Files */,
+			);
+			path = JustAuth;
+			sourceTree = "<group>";
+		};
+		345908871BD0DC3400DCBDD4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				345908881BD0DC3400DCBDD4 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		34594AD01BCCE84F0000D908 = {
 			isa = PBXGroup;
 			children = (
 				34594ADB1BCCE84F0000D908 /* InstagramSlideshow */,
+				345908861BD0DC3400DCBDD4 /* JustAuth */,
 				34594ADA1BCCE84F0000D908 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -132,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				34594AD91BCCE84F0000D908 /* InstagramSlideshow.app */,
+				345908851BD0DC3400DCBDD4 /* JustAuth.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -159,6 +211,8 @@
 				346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */,
 				346FE3B51BCE0B810003C1BC /* ISSViewImageViewController.h */,
 				346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */,
+				3459087E1BD0CC9700DCBDD4 /* ISSTextFieldViewController.h */,
+				3459087F1BD0CC9700DCBDD4 /* ISSTextFieldViewController.m */,
 				34594ADC1BCCE84F0000D908 /* Supporting Files */,
 			);
 			path = InstagramSlideshow;
@@ -233,6 +287,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		345908841BD0DC3400DCBDD4 /* JustAuth */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 345908991BD0DC3400DCBDD4 /* Build configuration list for PBXNativeTarget "JustAuth" */;
+			buildPhases = (
+				345908811BD0DC3400DCBDD4 /* Sources */,
+				345908821BD0DC3400DCBDD4 /* Frameworks */,
+				345908831BD0DC3400DCBDD4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JustAuth;
+			productName = JustAuth;
+			productReference = 345908851BD0DC3400DCBDD4 /* JustAuth.app */;
+			productType = "com.apple.product-type.application";
+		};
 		34594AD81BCCE84F0000D908 /* InstagramSlideshow */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 34594AF01BCCE84F0000D908 /* Build configuration list for PBXNativeTarget "InstagramSlideshow" */;
@@ -260,6 +331,9 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Jon Nguy";
 				TargetAttributes = {
+					345908841BD0DC3400DCBDD4 = {
+						CreatedOnToolsVersion = 7.1;
+					};
 					34594AD81BCCE84F0000D908 = {
 						CreatedOnToolsVersion = 7.1;
 					};
@@ -279,11 +353,22 @@
 			projectRoot = "";
 			targets = (
 				34594AD81BCCE84F0000D908 /* InstagramSlideshow */,
+				345908841BD0DC3400DCBDD4 /* JustAuth */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		345908831BD0DC3400DCBDD4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				345908971BD0DC3400DCBDD4 /* LaunchScreen.storyboard in Resources */,
+				345908941BD0DC3400DCBDD4 /* Assets.xcassets in Resources */,
+				345908921BD0DC3400DCBDD4 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34594AD71BCCE84F0000D908 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -297,6 +382,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		345908811BD0DC3400DCBDD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3459088F1BD0DC3400DCBDD4 /* ViewController.m in Sources */,
+				3459088C1BD0DC3400DCBDD4 /* AppDelegate.m in Sources */,
+				345908891BD0DC3400DCBDD4 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34594AD51BCCE84F0000D908 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -328,6 +423,7 @@
 				346FE3F31BCF57A70003C1BC /* SDWebImagePrefetcher.m in Sources */,
 				346FE3F41BCF57A70003C1BC /* UIButton+WebCache.m in Sources */,
 				346FE3F61BCF57A70003C1BC /* UIImage+MultiFormat.m in Sources */,
+				345908801BD0CC9700DCBDD4 /* ISSTextFieldViewController.m in Sources */,
 				346FE3EF1BCF57A70003C1BC /* SDWebImageDecoder.m in Sources */,
 				346FE3FA1BCF57A70003C1BC /* UIView+WebCacheOperation.m in Sources */,
 				346FE3B71BCE0B820003C1BC /* ISSViewImageViewController.m in Sources */,
@@ -337,6 +433,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		345908901BD0DC3400DCBDD4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				345908911BD0DC3400DCBDD4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		345908951BD0DC3400DCBDD4 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				345908961BD0DC3400DCBDD4 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		34594AE51BCCE84F0000D908 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -356,6 +468,28 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		3459089A1BD0DC3400DCBDD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = JustAuth/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jonnguy.JustAuth;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3459089B1BD0DC3400DCBDD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = JustAuth/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jonnguy.JustAuth;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		34594AEE1BCCE84F0000D908 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -469,6 +603,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		345908991BD0DC3400DCBDD4 /* Build configuration list for PBXNativeTarget "JustAuth" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3459089A1BD0DC3400DCBDD4 /* Debug */,
+				3459089B1BD0DC3400DCBDD4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		34594AD41BCCE84F0000D908 /* Build configuration list for PBXProject "InstagramSlideshow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

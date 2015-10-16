@@ -27,6 +27,8 @@
 @property (nonatomic, strong) UIWindow *externalWindow;
 @property (nonatomic, strong) NSArray *availableModes;
 
+@property (nonatomic, strong) NSMutableDictionary *mainDict;
+
 @property (nonatomic, strong) NSTimer *timer;
 
 @property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplayViewController;
@@ -41,6 +43,14 @@ static NSString * const reuseIdentifier = @"ImageCell";
     [super viewDidLoad];
     
     self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    self.mainDict = [NSMutableDictionary dictionaryWithCapacity:20]; // Size of 20 because that's how many are going to be shown in the view controller
+    
+    NSString *possiblyOtherAPIString = [[NSUserDefaults standardUserDefaults] objectForKey:@"OtherAPIKey"];
+    if (possiblyOtherAPIString) {
+        [ISSDataShare shared].secondAuthToken = possiblyOtherAPIString;
+        NSLog(@"Other API key that we're using: %@", [ISSDataShare shared].secondAuthToken);
+    }
 
     UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     [aFlowLayout setItemSize:CGSizeMake(200, 140)];
@@ -51,10 +61,24 @@ static NSString * const reuseIdentifier = @"ImageCell";
     self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
     // Webview stuff.. instagram..
-    NSString* authURL = [NSString stringWithFormat: @"%@?client_id=%@&redirect_uri=%@&response_type=code&scope=%@&DEBUG=True", INSTAGRAM_AUTHURL, INSTAGRAM_CLIENT_ID, INSTAGRAM_REDIRECT_URI, INSTAGRAM_SCOPE];
+    NSString* authURL = [NSString stringWithFormat: @"%@?client_id=%@&redirect_uri=%@&response_type=code&scope=%@", INSTAGRAM_AUTHURL, INSTAGRAM_CLIENT_ID, INSTAGRAM_REDIRECT_URI, INSTAGRAM_SCOPE];
     
     [self.webView loadRequest: [NSURLRequest requestWithURL: [NSURL URLWithString: authURL]]];
     [self.webView setDelegate:self];
+    
+    // -viewDidLoad
+    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
+    swipeRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
+    swipeRecognizer.numberOfTouchesRequired = 3;
+    [self.view addGestureRecognizer:swipeRecognizer];
+}
+
+- (void)swiped:(UISwipeGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateRecognized)
+    {
+        NSLog(@"Three finger swiped tapped");
+        [self performSegueWithIdentifier:@"showTextField" sender:self];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

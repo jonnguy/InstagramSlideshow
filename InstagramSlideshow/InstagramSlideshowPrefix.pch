@@ -25,6 +25,7 @@
 
 #define SEARCH_COMBINED                                 [NSString stringWithFormat:@"%@q=%@",INSTAGRAM_SEARCH,BEN_LOVES_CRYSTAL]
 #define TOKEN_COMBINED                                  [NSString stringWithFormat:@"%@=%@",INSTAGRAM_ACCESS_TOKEN,[[ISSDataShare shared] authToken]]
+#define SECOND_TOKEN_COMBINED                           [NSString stringWithFormat:@"%@=%@",INSTAGRAM_ACCESS_TOKEN,[[ISSDataShare shared] secondAuthToken]]
 
 #import "ISSConstants.h"
 #import "ISSDataShare.h"
