@@ -30,7 +30,6 @@
     snapshotView.frame = self.openingFrame;
     [containerView addSubview:snapshotView];
     [toViewController.view setAlpha:0.0];
-    [containerView addSubview:fromViewController.view];
 //    [toViewController.view setBackgroundColor:[UIColor clearColor]];
     [containerView addSubview:toViewController.view];
     
