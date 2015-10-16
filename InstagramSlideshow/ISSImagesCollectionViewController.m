@@ -12,7 +12,6 @@
 #import "ISSViewImageViewController.h"
 #import "ISSExternalDisplayCollectionViewController.h"
 
-
 #import "ISSDismissalAnimator.h"
 #import "ISSPresentationAnimator.h"
 
@@ -293,11 +292,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
     NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
     vc.imageID = photoID;
     vc.transitioningDelegate = self;
-    vc.modalPresentationCapturesStatusBarAppearance = UIModalPresentationPopover;
     [self presentViewController:vc animated:YES completion:nil];
     
 }
-
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
     ISSPresentationAnimator *animator = [[ISSPresentationAnimator alloc] init];
@@ -313,21 +310,21 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 #pragma mark Notifications for Screen changes
 
-- (void)screenDidConnect:(NSNotification *)not {
-    NSLog(@"Screen connected");
-    
-    NSArray *screens = [UIScreen screens];
-    NSLog(@"Screens: %@", screens);
-    
-    self.externalScreen = screens[1];
-    self.availableModes = [self.externalScreen availableModes];
-    self.externalDisplayViewController.view.frame = self.externalWindow.bounds;
-    
-    [self.externalWindow setHidden:NO];
-    [self.externalWindow setScreen:self.externalScreen];
-    [self.externalWindow addSubview:self.externalDisplayViewController.view];
-    
-}
+//- (void)screenDidConnect:(NSNotification *)not {
+//    NSLog(@"Screen connected");
+//    
+//    NSArray *screens = [UIScreen screens];
+//    NSLog(@"Screens: %@", screens);
+//    
+//    self.externalScreen = screens[1];
+//    self.availableModes = [self.externalScreen availableModes];
+//    self.externalDisplayViewController.view.frame = self.externalWindow.bounds;
+//    
+//    [self.externalWindow setHidden:NO];
+//    [self.externalWindow setScreen:self.externalScreen];
+//    [self.externalWindow addSubview:self.externalDisplayViewController.view];
+//    
+//}
 
 - (void)screenDidDisconnect:(NSNotification *)not {
     NSLog(@"Screen disconnected");

@@ -7,23 +7,29 @@
 //
 
 #import "ISSDismissalAnimator.h"
+#import "ISSViewImageViewController.h"
 
 @implementation ISSDismissalAnimator
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
-    return .75;
+    return .55;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    ISSViewImageViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *containerView = [transitionContext containerView];
     
     NSTimeInterval animationDuration = [self transitionDuration:transitionContext];
     
+    // This one zooms into the photo before zooming the view out
+//    UIView *snapshotView = [fromViewController.mainImageView resizableSnapshotViewFromRect:fromViewController.mainImageView.bounds afterScreenUpdates:YES withCapInsets:UIEdgeInsetsZero];
+    
+    // This one zoomes the whole view and then resizes at the end
     UIView *snapshotView = [fromViewController.view resizableSnapshotViewFromRect:fromViewController.view.bounds afterScreenUpdates:YES withCapInsets:UIEdgeInsetsZero];
     [containerView addSubview:toViewController.view];
     [containerView addSubview:snapshotView];
+    
     
     [fromViewController.view removeFromSuperview];
     

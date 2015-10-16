@@ -10,6 +10,7 @@
 
 @interface ISSViewImageViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 @property (nonatomic, strong) NSString *imageID;
 
 @end

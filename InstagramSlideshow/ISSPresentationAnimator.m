@@ -11,28 +11,27 @@
 @implementation ISSPresentationAnimator
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
-        return .75;
+        return .55;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey]; // Not used
+    UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *containerView = [transitionContext containerView];
     
     NSTimeInterval animationDuration = [self transitionDuration:transitionContext];
     
-    CGRect fromViewFrame = [fromViewController.view frame];
-    
-    UIGraphicsBeginImageContext(fromViewFrame.size);
-    [fromViewController.view drawViewHierarchyInRect:fromViewFrame afterScreenUpdates:YES];
-    UIGraphicsEndImageContext();
+//    CGRect fromViewFrame = [fromViewController.view frame];
+//    UIGraphicsBeginImageContext(fromViewFrame.size);
+//    [fromViewController.view drawViewHierarchyInRect:fromViewFrame afterScreenUpdates:YES];
+//    UIGraphicsEndImageContext();
     
     UIView *snapshotView = [toViewController.view resizableSnapshotViewFromRect:toViewController.view.frame afterScreenUpdates:YES withCapInsets:UIEdgeInsetsZero];
     snapshotView.frame = self.openingFrame;
-    
     [containerView addSubview:snapshotView];
-    
     [toViewController.view setAlpha:0.0];
+    [containerView addSubview:fromViewController.view];
+//    [toViewController.view setBackgroundColor:[UIColor clearColor]];
     [containerView addSubview:toViewController.view];
     
     [UIView animateWithDuration:animationDuration delay:0.0 usingSpringWithDamping:1.0 initialSpringVelocity:1.0 options:UIViewAnimationOptionTransitionNone animations:^{
@@ -40,7 +39,7 @@
     } completion:^(BOOL finished) {
         [snapshotView removeFromSuperview];
         [toViewController.view setAlpha:1.0];
-        [toViewController.view setBackgroundColor:[UIColor clearColor]];
+        [toViewController.view setBackgroundColor:[UIColor whiteColor]];
         
         [transitionContext completeTransition:finished];
     }];

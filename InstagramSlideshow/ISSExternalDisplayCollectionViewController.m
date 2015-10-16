@@ -79,6 +79,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 */
 
+
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -89,7 +90,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     NSUInteger imagesFound = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
     if (imagesFound > 0) {
-        NSLog(@"Returned %ld items in section", (unsigned long)imagesFound);
+        NSLog(@"Returned %ld items in section", imagesFound);
         return imagesFound;
     }
     NSLog(@"Returned 0 items in section");
@@ -97,11 +98,12 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(120.f, 120.f);
+    CGFloat oneThird = self.view.frame.size.width / 6;
+    return CGSizeMake(oneThird, oneThird);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(10.0, 5.0, 0.0, 5.0);
+    return UIEdgeInsetsMake(20.0, 10.0, 0.0, 10.0);
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -110,11 +112,12 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCell" forIndexPath:indexPath];
+    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     UIImageView *recipeImageView = [[UIImageView alloc] init];
     
-    NSString *imageURL = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
+    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+    NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];
     //    NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
     
