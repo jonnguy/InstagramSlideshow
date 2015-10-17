@@ -250,7 +250,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     NSUInteger imagesFound = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
     if (imagesFound > 0) {
-        NSLog(@"Returned %ld items in section", imagesFound);
+        NSLog(@"Returned %ld items in section", (unsigned long)imagesFound);
         return imagesFound;
     }
     NSLog(@"Returned 0 items in section");

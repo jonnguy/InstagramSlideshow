@@ -68,9 +68,9 @@
     // Likes label
     NSInteger likes = [self.userDictionary[kISSLikesKey] integerValue];
     if (likes == 1) {
-        self.likesLabel.text = [NSString stringWithFormat:@"%ld like", likes];
+        self.likesLabel.text = [NSString stringWithFormat:@"%ld like", (unsigned long)likes];
     } else {
-        self.likesLabel.text = [NSString stringWithFormat:@"%ld likes", likes];
+        self.likesLabel.text = [NSString stringWithFormat:@"%ld likes", (unsigned long)likes];
     }
     
     // Comment label
