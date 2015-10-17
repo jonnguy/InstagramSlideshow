@@ -28,8 +28,8 @@
 @property (nonatomic, strong) NSArray *availableModes;
 
 @property (nonatomic, strong) NSMutableDictionary *mainDict;
-
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) BOOL tappedOnce;
 
 @property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplayViewController;
 
@@ -66,6 +66,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
     [self.webView loadRequest: [NSURLRequest requestWithURL: [NSURL URLWithString: authURL]]];
     [self.webView setDelegate:self];
     
+    self.tappedOnce = NO;
+    
     // -viewDidLoad
     UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
     swipeRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
@@ -84,7 +86,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self startTimer];
+    if (self.tappedOnce) {
+        [self startTimer];
+    }
 }
 
 - (void)startTimer {
@@ -239,6 +243,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    self.tappedOnce = YES;
     
     if (!cell) {
         return;
