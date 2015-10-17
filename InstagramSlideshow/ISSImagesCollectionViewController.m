@@ -121,64 +121,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     [self webViewDidFinishLoad:webView];
 }
 
-#pragma mark My methods
-
-- (void)fetchImagesWithTag {
-    NSString *reqString = [NSString stringWithFormat:@"%@%@", INSTAGRAM_APITAG, TOKEN_COMBINED];
-    NSLog(@"reqString: %@", reqString);
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:reqString]];
-    NSURLSessionDataTask *data = [self.session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"Error: %@", error);
-        } else {
-            [ISSDataShare shared].fetchedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-            
-            [self cacheImagesFromInstagram];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.webView setHidden:YES];
-                [self.webView removeFromSuperview];
-            });
-            
-            // Refresh the table once we get something
-            [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-        }
-    }];
-    
-    [data resume];
-}
-
-- (void)cacheImagesFromInstagram {
-    NSArray *photosArray = [ISSDataShare shared].fetchedData[kISSDataKey];
-    
-    [photosArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        // (NSString *) Images is the URL of the image, not the actual image
-        dict[kISSImagesKey] = photosArray[idx][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
-        
-        // (NSString *) Caption of the picture in plain text
-        dict[kISSCaptionKey] = photosArray[idx][kISSCaptionKey][kISSTextKey];
-        
-        // (NSString *) Name of the poster
-        dict[kISSFullNameKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSFullNameKey];
-        
-        // (NSString *) Username of the poster
-        dict[kISSUsernameKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSUsernameKey];
-        
-        // (NSString *) Profile picture of poster
-        dict[kISSProfilePictureKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey];
-        
-        // (NSNumber *) Number of likes.. get integerValue of it.
-        dict[kISSLikesKey] = photosArray[idx][kISSLikesKey][kISSCountKey];
-        
-        [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey]] options:0 progress:nil completed:nil];
-        
-        // Now we should set the ID key in the dictionary to our newly formed dictionary.. This should be safe, right?
-        NSString *photoID = photosArray[idx][kISSIDKey];
-        [ISSDataShare shared].filteredData[photoID] = dict;
-    }];
-}
-
 
 - (BOOL)checkRequestForCallbackURL:(NSURLRequest *)request {
     NSString* urlString = [[request URL] absoluteString];
@@ -217,10 +159,17 @@ static NSString * const reuseIdentifier = @"ImageCell";
             [[ISSDataShare shared] setAuthToken:dict[@"access_token"]];
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.webView setHidden:YES]; 
                 [self.webView removeFromSuperview];
             });
             
-            [self fetchImagesWithTag];
+            [[ISSDataShare shared] fetchTagImagesWithAuth:TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
+                if (error) {
+                    NSLog(@"Error fetching images with tag: %@", error);
+                } else {
+                    [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+                }
+            }];
         }
     }];
     
