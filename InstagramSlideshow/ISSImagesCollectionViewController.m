@@ -343,6 +343,10 @@ static NSString * const reuseIdentifier = @"ImageCell";
     return YES;
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskLandscape;
+}
+
 /*
  #pragma mark - Navigation
  
