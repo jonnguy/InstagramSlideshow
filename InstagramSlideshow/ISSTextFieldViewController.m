@@ -34,25 +34,14 @@
     
     [ISSDataShare shared].secondAuthToken = self.tokenTextField.text;
     
-    [self doSomething];
-}
-
-- (void)doSomething {
-    NSString *reqString = [NSString stringWithFormat:@"%@%@", INSTAGRAM_APITAG, TOKEN_COMBINED];
-    NSLog(@"reqString: %@", reqString);
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:reqString]];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    NSURLSessionDataTask *data = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSLog(@"Saved other token: %@", [ISSDataShare shared].secondAuthToken);
+    [[ISSDataShare shared] fetchTagImagesWithAuth:[ISSDataShare shared].secondAuthToken completionHandler:^(NSDictionary *dict, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@", error);
+            NSLog(@"Error: %@", error.localizedDescription);
         } else {
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-            NSLog(@"%@", dict);
+            NSLog(@"Fetched 2nd dict");
         }
     }];
-    
-    [data resume];
 }
 
 - (IBAction)close:(id)sender {
