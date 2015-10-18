@@ -31,6 +31,9 @@
 }
 
 + (NSString *)popQueuedPhoto {
+    if (![ISSDataShare shared].queuedPhotoIDs[0]) {
+        return nil;
+    }
     NSString *photoID = [ISSDataShare shared].queuedPhotoIDs[0];
     [[ISSDataShare shared].queuedPhotoIDs removeObjectAtIndex:0];
     return photoID;
@@ -38,6 +41,9 @@
 
 // Get the first element, return it, but also move it to the end
 + (NSString *)popCompletedPhoto {
+    if (![ISSDataShare shared].completedPhotoIDs[0]) {
+        return nil;
+    }
     NSString *photoID = [ISSDataShare shared].completedPhotoIDs[0];
     [[ISSDataShare shared].completedPhotoIDs removeObjectAtIndex:0];
     return photoID;
