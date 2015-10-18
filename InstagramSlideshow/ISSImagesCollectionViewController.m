@@ -73,6 +73,15 @@ static NSString * const reuseIdentifier = @"ImageCell";
     swipeRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
     swipeRecognizer.numberOfTouchesRequired = 3;
     [self.view addGestureRecognizer:swipeRecognizer];
+    
+    UITapGestureRecognizer *tapOnce = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedOnce:)];
+    tapOnce.numberOfTouchesRequired = 2;
+    [self.view addGestureRecognizer:tapOnce];
+}
+
+- (void)tappedOnce:(UITapGestureRecognizer *)recognizer {
+    NSLog(@"Invalidated timer");
+    [self.timer invalidate];
 }
 
 - (void)swiped:(UISwipeGestureRecognizer *)recognizer {
