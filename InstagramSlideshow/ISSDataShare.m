@@ -21,12 +21,33 @@
 
 - (id)init {
     if (self = [super init]) {
-        self.fetchedData = [NSDictionary dictionary];
+        self.fetchedData = [NSMutableDictionary dictionary];
         self.filteredData = [NSMutableDictionary dictionary];
+        self.queuedPhotoIDs = [NSMutableArray array];
+        self.completedPhotoIDs = [NSMutableArray array];
         return self;
     }
     return nil;
 }
+
++ (NSString *)popQueuedPhoto {
+    NSString *photoID = [ISSDataShare shared].queuedPhotoIDs[0];
+    [[ISSDataShare shared].queuedPhotoIDs removeObjectAtIndex:0];
+    return photoID;
+}
+
+// Get the first element, return it, but also move it to the end
++ (NSString *)firstCompletedPhotoID {
+    NSString *photoID = [ISSDataShare shared].completedPhotoIDs[0];
+    [[ISSDataShare shared].completedPhotoIDs removeObjectAtIndex:0];
+    [[ISSDataShare shared].completedPhotoIDs addObject:photoID];
+    return photoID;
+}
+
++ (void)addToCompletedPhotoIDs:(NSString *)photoID {
+    [[ISSDataShare shared].completedPhotoIDs addObject:photoID];
+}
+
 
 #pragma mark My methods
 
@@ -40,7 +61,12 @@
         if (error) {
             NSLog(@"Error: %@", error);
         } else {
-            self.fetchedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            if (self.fetchedData.count) {
+                // I think this is right..
+                [self.fetchedData addEntriesFromDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]];
+            } else {
+                self.fetchedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            }
             
             [self cacheImagesFromInstagram];
         }
@@ -58,7 +84,16 @@
     NSArray *photosArray = [ISSDataShare shared].fetchedData[kISSDataKey];
     
     [photosArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        // Store photoID first since we want to check if it arleady exists in filteredData.
+        NSString *photoID = photosArray[idx][kISSIDKey];
+        if (self.filteredData[photoID]) {
+            return;
+        }
+        // Add photo to queued
+        [self.queuedPhotoIDs addObject:photoID];
+        
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        
         // (NSString *) Images is the URL of the image, not the actual image
         dict[kISSImagesKey] = photosArray[idx][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
         
@@ -80,7 +115,6 @@
         [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey]] options:0 progress:nil completed:nil];
         
         // Now we should set the ID key in the dictionary to our newly formed dictionary.. This should be safe, right?
-        NSString *photoID = photosArray[idx][kISSIDKey];
         self.filteredData[photoID] = dict;
     }];
 }

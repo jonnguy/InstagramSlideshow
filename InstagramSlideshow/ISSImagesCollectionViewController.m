@@ -27,7 +27,7 @@
 @property (nonatomic, strong) UIWindow *externalWindow;
 @property (nonatomic, strong) NSArray *availableModes;
 
-@property (nonatomic, strong) NSMutableDictionary *mainDict;
+@property (nonatomic, strong) NSMutableArray *shownPhotoIDs;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) BOOL tappedOnce;
 
@@ -44,7 +44,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
-    self.mainDict = [NSMutableDictionary dictionaryWithCapacity:20]; // Size of 20 because that's how many are going to be shown in the view controller
+    self.shownPhotoIDs = [NSMutableArray arrayWithCapacity:20];
     
     NSString *possiblyOtherAPIString = [[NSUserDefaults standardUserDefaults] objectForKey:@"OtherAPIKey"];
     if (possiblyOtherAPIString) {
@@ -167,11 +167,27 @@ static NSString * const reuseIdentifier = @"ImageCell";
                 [self.webView removeFromSuperview];
             });
             
+            // This should be the first fetch.
             [[ISSDataShare shared] fetchTagImagesWithAuth:TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
                 if (error) {
-                    NSLog(@"Error fetching images with tag: %@", error);
+                    NSLog(@"Error fetching images with tag: %@", error.localizedDescription);
                 } else {
+                    
+                    for (int i = 0; i < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0; i++) {
+                        [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
+                    }
+                    
                     [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+                }
+            }];
+            
+            // TODO: Fix
+            // If we have a second thing, we should also fetch
+            [[ISSDataShare shared] fetchTagImagesWithAuth:SECOND_TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
+                if (error) {
+                    NSLog(@"Error with 2nd token: %@", error.localizedDescription);
+                } else {
+                    
                 }
             }];
         }
@@ -182,7 +198,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)tapRandomCell {
     [self.timer invalidate];
-    NSUInteger size = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
+    NSUInteger size = [self.shownPhotoIDs count];
     if (!size) {
         return;
     }
@@ -201,7 +217,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSUInteger imagesFound = [[ISSDataShare shared].fetchedData[kISSDataKey] count];
+    NSUInteger imagesFound = [self.shownPhotoIDs count];
     if (imagesFound > 0) {
         NSLog(@"Returned %ld items in section", (unsigned long)imagesFound);
         return imagesFound;
@@ -229,8 +245,12 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     UIImageView *recipeImageView = [[UIImageView alloc] init];
     
-    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+    NSString *photoID = self.shownPhotoIDs[indexPath.row];
     NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];
+    
+    
+//    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+//    NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];
 //    NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
     
@@ -244,7 +264,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
-    self.tappedOnce = YES;
+    self.tappedOnce = YES; // BOOL to start auto-tapping after the first one
     
     if (!cell) {
         return;
@@ -252,17 +272,42 @@ static NSString * const reuseIdentifier = @"ImageCell";
     UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
     CGRect attributesFrame = attr.frame;
     CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];
-    
     self.openingFrame = frameToOpenFrom;
     
+    NSString *photoID = self.shownPhotoIDs[indexPath.row];
+    // Add to photos we tapped and remove from the collection view main dict.
+    if (![[ISSDataShare shared].completedPhotoIDs containsObject:photoID]) {
+        [ISSDataShare addToCompletedPhotoIDs:photoID];
+    }
+    [self updatePhotoAtIndex:indexPath.row];
+    
+//    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
+    // Set the new view controller.. Instantiate because we have a custom animation.
     ISSViewImageViewController *vc = (ISSViewImageViewController *)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"viewImageVC"];
-    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
     vc.imageID = photoID;
     vc.transitioningDelegate = self;
     [self presentViewController:vc animated:YES completion:nil];
     
 }
 
+- (void)updatePhotoAtIndex:(NSInteger)index {
+    // If we have queued photos, use that, else recycle from completed photos ID
+    if ([[ISSDataShare shared].queuedPhotoIDs count]) {
+        NSString *photoID = [ISSDataShare popQueuedPhoto];
+        NSLog(@"Replaced from queued: %@", photoID);
+        self.shownPhotoIDs[index] = photoID;
+    } else {
+        // If there's no queued, just recycle from the used
+        NSString *photoID = [ISSDataShare firstCompletedPhotoID];
+        NSLog(@"Recycled from completedPhotos");
+        self.shownPhotoIDs[index] = photoID;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+    });
+}
+
+#pragma mark Animation
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
     ISSPresentationAnimator *animator = [[ISSPresentationAnimator alloc] init];
     animator.openingFrame = self.openingFrame;
