@@ -15,12 +15,15 @@
 @property (nonatomic, strong) NSString *authToken;
 @property (nonatomic, strong) NSString *secondAuthToken;
 @property (nonatomic, strong) NSMutableDictionary *fetchedData;
+@property (nonatomic, strong) NSMutableArray *fetchedOnlyData;
 @property (nonatomic, strong) NSMutableDictionary *filteredData; // This is a custom dictionary from the fetched data so I don't have to mess with the huge JSON they send us.
 @property (nonatomic, strong) NSMutableArray *queuedPhotoIDs; // These are photo IDs that aren't being used
 @property (nonatomic, strong) NSMutableArray *completedPhotoIDs; // These are photos that we should recycle
 
+@property (nonatomic, strong) NSMutableArray *nextURLs;
+
 + (NSString *)popQueuedPhoto;
-+ (NSString *)firstCompletedPhotoID;
++ (NSString *)popCompletedPhoto;
 + (void)addToCompletedPhotoIDs:(NSString *)photoID;
 
 - (void)fetchTagImagesWithAuth:(NSString *)auth completionHandler:(void (^)(NSDictionary *dict, NSError *error))completionHandler;

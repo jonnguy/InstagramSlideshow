@@ -21,7 +21,7 @@
 
 - (id)init {
     if (self = [super init]) {
-        self.fetchedData = [NSMutableDictionary dictionary];
+        self.nextURLs = [NSMutableArray arrayWithCapacity:2];
         self.filteredData = [NSMutableDictionary dictionary];
         self.queuedPhotoIDs = [NSMutableArray array];
         self.completedPhotoIDs = [NSMutableArray array];
@@ -37,10 +37,9 @@
 }
 
 // Get the first element, return it, but also move it to the end
-+ (NSString *)firstCompletedPhotoID {
++ (NSString *)popCompletedPhoto {
     NSString *photoID = [ISSDataShare shared].completedPhotoIDs[0];
     [[ISSDataShare shared].completedPhotoIDs removeObjectAtIndex:0];
-    [[ISSDataShare shared].completedPhotoIDs addObject:photoID];
     return photoID;
 }
 
@@ -50,6 +49,9 @@
 
 
 #pragma mark My methods
+//- (void)fetchImagesWithNextURLIndex:(NSInteger)index {
+//    NSURL *url = [NSURL URLWithString:self.nextURLs[index]];
+//}
 
 - (void)fetchTagImagesWithAuth:(NSString *)auth completionHandler:(void (^)(NSDictionary *dict, NSError *error))completionHandler {
     NSString *reqString = [NSString stringWithFormat:@"%@%@", INSTAGRAM_APITAG, auth];
@@ -61,12 +63,10 @@
         if (error) {
             NSLog(@"Error: %@", error);
         } else {
-            if (self.fetchedData.count) {
-                // I think this is right..
-                [self.fetchedData addEntriesFromDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]];
-            } else {
-                self.fetchedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            }
+            NSDictionary *fetched = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            self.fetchedData = [NSMutableDictionary dictionaryWithDictionary:fetched];
+            
+            NSLog(@"Fetched count: %ld", (unsigned long)[fetched[kISSDataKey] count]);
             
             [self cacheImagesFromInstagram];
         }

@@ -181,15 +181,15 @@ static NSString * const reuseIdentifier = @"ImageCell";
                 }
             }];
             
-            // TODO: Fix
-            // If we have a second thing, we should also fetch
-            [[ISSDataShare shared] fetchTagImagesWithAuth:SECOND_TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
-                if (error) {
-                    NSLog(@"Error with 2nd token: %@", error.localizedDescription);
-                } else {
-                    
-                }
-            }];
+//            // TODO: Fix
+//            // If we have a second thing, we should also fetch
+//            [[ISSDataShare shared] fetchTagImagesWithAuth:SECOND_TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
+//                if (error) {
+//                    NSLog(@"Error with 2nd token: %@", error.localizedDescription);
+//                } else {
+//                    
+//                }
+//            }];
         }
     }];
     
@@ -275,6 +275,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
     self.openingFrame = frameToOpenFrom;
     
     NSString *photoID = self.shownPhotoIDs[indexPath.row];
+    NSLog(@"Tapped photo ID: %@", photoID);
     // Add to photos we tapped and remove from the collection view main dict.
     if (![[ISSDataShare shared].completedPhotoIDs containsObject:photoID]) {
         [ISSDataShare addToCompletedPhotoIDs:photoID];
@@ -291,15 +292,19 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (void)updatePhotoAtIndex:(NSInteger)index {
+//    NSLog(@"Current (%ld): %@", [self.shownPhotoIDs count], self.shownPhotoIDs);
+//    NSLog(@"Queued (%ld): %@", [[ISSDataShare shared].queuedPhotoIDs count], [ISSDataShare shared].queuedPhotoIDs);
+//    NSLog(@"Completed (%ld): %@", [[ISSDataShare shared].completedPhotoIDs count], [ISSDataShare shared].completedPhotoIDs);
     // If we have queued photos, use that, else recycle from completed photos ID
+    NSString *photoID;
     if ([[ISSDataShare shared].queuedPhotoIDs count]) {
-        NSString *photoID = [ISSDataShare popQueuedPhoto];
+        photoID = [ISSDataShare popQueuedPhoto];
         NSLog(@"Replaced from queued: %@", photoID);
         self.shownPhotoIDs[index] = photoID;
     } else {
         // If there's no queued, just recycle from the used
-        NSString *photoID = [ISSDataShare firstCompletedPhotoID];
-        NSLog(@"Recycled from completedPhotos");
+        photoID = [ISSDataShare popCompletedPhoto];
+        NSLog(@"Recycled from completed photos: %@", photoID);
         self.shownPhotoIDs[index] = photoID;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
