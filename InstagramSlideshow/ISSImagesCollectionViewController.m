@@ -181,11 +181,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
                 if (error) {
                     NSLog(@"Error fetching images with tag: %@", error.localizedDescription);
                 } else {
-                    
                     for (int i = 0; i < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0; i++) {
                         [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
                     }
-                    
                     [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
                 }
             }];
@@ -198,11 +196,12 @@ static NSString * const reuseIdentifier = @"ImageCell";
                     if (error) {
                         NSLog(@"Error with 2nd token: %@", error.localizedDescription);
                     } else {
-                        while ([self.shownPhotoIDs count] <= 20 && [[ISSDataShare shared].queuedPhotoIDs count]) {
+                        while ([self.shownPhotoIDs count] < 20 && [[ISSDataShare shared].queuedPhotoIDs count]) {
                             [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
+                            });
                         }
-                        
-                        [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
                     }
                 }];
             }
@@ -263,7 +262,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     
     NSString *photoID = self.shownPhotoIDs[indexPath.row];
     NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];
-    
     
 //    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
 //    NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];

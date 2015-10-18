@@ -123,7 +123,7 @@
     [photosArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         // Store photoID first since we want to check if it arleady exists in filteredData.
         NSString *photoID = photosArray[idx][kISSIDKey];
-        if (self.filteredData[photoID]) {
+        if (self.filteredData[photoID] || [self.queuedPhotoIDs containsObject:photoID]) {
             return;
         }
         // Add photo to queued
