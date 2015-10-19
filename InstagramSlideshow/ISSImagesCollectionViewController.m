@@ -47,6 +47,11 @@ static NSString * const reuseIdentifier = @"ImageCell";
                                                  name:kISSNotificationFetchedData
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(stopTimer)
+                                                 name:kISSNotificationBackgrounded
+                                               object:nil];
+    
     self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     self.shownPhotoIDs = [NSMutableArray arrayWithCapacity:20];
@@ -111,6 +116,11 @@ static NSString * const reuseIdentifier = @"ImageCell";
                                                 selector:@selector(tapRandomCell)
                                                 userInfo:nil
                                                  repeats:YES];
+}
+
+- (void)stopTimer {
+    NSLog(@"Backgrounded app, stopping timer");
+    [self.timer invalidate];
 }
 
 - (void)didReceiveMemoryWarning {

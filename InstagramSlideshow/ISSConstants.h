@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 extern NSString * const kISSNotificationFetchedData;
+extern NSString * const kISSNotificationBackgrounded;
 
 extern NSString * const kISSImagesKey;
 extern NSString * const kISSStandardResolutionKey;

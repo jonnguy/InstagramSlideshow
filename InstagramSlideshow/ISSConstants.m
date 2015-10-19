@@ -8,6 +8,7 @@
 
 #import "ISSConstants.h"
 NSString * const kISSNotificationFetchedData    = @"FetchedData";
+NSString * const kISSNotificationBackgrounded   = @"AppBackgrounded";
 
 // Keys for Instagram dictionary
 NSString * const kISSImagesKey              = @"images";
