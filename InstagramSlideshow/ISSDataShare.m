@@ -11,7 +11,6 @@
 @interface ISSDataShare ()
 
 @property (nonatomic, strong) NSURLSession *session;
-
 @end
 
 @implementation ISSDataShare
@@ -32,6 +31,8 @@
         self.filteredData = [NSMutableDictionary dictionary];
         self.queuedPhotoIDs = [NSMutableArray array];
         self.completedPhotoIDs = [NSMutableArray array];
+        self.fetchingFirst = NO;
+        self.fetchingSecond = NO;
         return self;
     }
     return nil;
@@ -40,6 +41,33 @@
 + (NSString *)popQueuedPhoto {
     if (![ISSDataShare shared].queuedPhotoIDs[0]) {
         return nil;
+    }
+    // Start fetching when we have 10 queued photos
+    if ([[ISSDataShare shared].queuedPhotoIDs count] <= 10 &&
+        ![ISSDataShare shared].isFetchingFirst &&
+        ![ISSDataShare shared].isFetchingSecond) {
+        
+        [ISSDataShare shared].fetchingFirst = YES;
+        [ISSDataShare shared].fetchingSecond = YES;
+        
+        NSLog(@"Count is less than or equal 10, fetching new.");
+        // We should fetch both next URLs if we have it
+        if ([[ISSDataShare shared].nextURLs count] >= 1 && [ISSDataShare shared].nextURLs[0]) {
+            [[ISSDataShare shared] fetchImagesWithNextURLIndex:0];
+        } else {
+            [[ISSDataShare shared] fetchTagImagesWithAuth:TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
+                [ISSDataShare shared].fetchingFirst = NO;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kISSNotificationFetchedData object:self];
+            }];
+        }
+        if ([[ISSDataShare shared].nextURLs count] >= 2 && [ISSDataShare shared].nextURLs[1]) {
+            [[ISSDataShare shared] fetchImagesWithNextURLIndex:1];
+        } else {
+            [[ISSDataShare shared] fetchTagImagesWithAuth:SECOND_TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
+                [ISSDataShare shared].fetchingSecond = NO;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kISSNotificationFetchedData object:self];
+            }];
+        }
     }
     NSString *photoID = [ISSDataShare shared].queuedPhotoIDs[0];
     [[ISSDataShare shared].queuedPhotoIDs removeObjectAtIndex:0];
@@ -67,6 +95,7 @@
     if (self.nextURLs[index]) {
         url = [NSURL URLWithString:self.nextURLs[index]];
     }
+    NSLog(@"Fetching with next URL: %@", url);
     
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *data = [self.session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -77,15 +106,20 @@
             self.fetchedData = [NSMutableDictionary dictionaryWithDictionary:fetched];
             
             NSLog(@"Fetched count: %ld", (unsigned long)[fetched[kISSDataKey] count]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kISSNotificationFetchedData object:self];
+            
+            if (index == 0) {
+                self.nextURLs[0] = fetched[kISSPaginationKey][kISSNextURLKey];
+                self.fetchingFirst = NO;
+            } else {
+                self.nextURLs[1] = fetched[kISSPaginationKey][kISSNextURLKey];
+                self.fetchingSecond = NO;
+            }
             
             [self cacheImagesFromInstagram];
         }
     }];
     [data resume];
-}
-
-- (void)fetchImagesWithNoNextURL {
-    
 }
 
 - (void)fetchTagImagesWithAuth:(NSString *)auth completionHandler:(void (^)(NSDictionary *dict, NSError *error))completionHandler {
@@ -123,7 +157,7 @@
     [photosArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         // Store photoID first since we want to check if it arleady exists in filteredData.
         NSString *photoID = photosArray[idx][kISSIDKey];
-        if (self.filteredData[photoID] || [self.queuedPhotoIDs containsObject:photoID]) {
+        if (self.filteredData[photoID] || [self.queuedPhotoIDs containsObject:photoID] || [self.completedPhotoIDs containsObject:photoID]) {
             return;
         }
         // Add photo to queued

@@ -7,6 +7,7 @@
 //
 
 #import "ISSConstants.h"
+NSString * const kISSNotificationFetchedData    = @"FetchedData";
 
 // Keys for Instagram dictionary
 NSString * const kISSImagesKey              = @"images";
@@ -23,3 +24,5 @@ NSString * const kISSUsernameKey            = @"username";
 NSString * const kISSProfilePictureKey      = @"profile_picture";
 NSString * const kISSLikesKey               = @"likes";
 NSString * const kISSCountKey               = @"count";
+NSString * const kISSPaginationKey          = @"pagination";
+NSString * const kISSNextURLKey             = @"next_url";

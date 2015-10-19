@@ -22,6 +22,10 @@
 
 @property (nonatomic, strong) NSMutableArray *nextURLs;
 
+// These bools are so we don't refetch if we're currently fetching
+@property (nonatomic, assign, getter=isFetchingFirst) BOOL fetchingFirst;
+@property (nonatomic, assign, getter=isFetchingSecond) BOOL fetchingSecond;
+
 + (NSString *)popQueuedPhoto;
 + (NSString *)popCompletedPhoto;
 + (void)addToCompletedPhotoIDs:(NSString *)photoID;

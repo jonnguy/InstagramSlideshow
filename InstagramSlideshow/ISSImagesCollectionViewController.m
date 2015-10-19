@@ -42,6 +42,11 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadDataOnMainThread)
+                                                 name:kISSNotificationFetchedData
+                                               object:nil];
+    
     self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     self.shownPhotoIDs = [NSMutableArray arrayWithCapacity:20];
@@ -184,6 +189,12 @@ static NSString * const reuseIdentifier = @"ImageCell";
                     for (int i = 0; i < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0; i++) {
                         [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
                     }
+                    
+                    NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
+                    if (nextURL) {
+                        [ISSDataShare shared].nextURLs[0] = nextURL;
+                    }
+                    NSLog(@"Next URL 1: %@", nextURL);
                     [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
                 }
             }];
@@ -202,6 +213,12 @@ static NSString * const reuseIdentifier = @"ImageCell";
                                 [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
                             });
                         }
+                        
+                        NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
+                        if (nextURL) {
+                            [ISSDataShare shared].nextURLs[1] = nextURL;
+                        }
+                        NSLog(@"Next URL 2: %@", nextURL);
                     }
                 }];
             }
@@ -306,9 +323,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (void)updatePhotoAtIndex:(NSInteger)index {
-//    NSLog(@"Current (%ld): %@", [self.shownPhotoIDs count], self.shownPhotoIDs);
-//    NSLog(@"Queued (%ld): %@", [[ISSDataShare shared].queuedPhotoIDs count], [ISSDataShare shared].queuedPhotoIDs);
-//    NSLog(@"Completed (%ld): %@", [[ISSDataShare shared].completedPhotoIDs count], [ISSDataShare shared].completedPhotoIDs);
+    NSLog(@"Current (%ld): %@", [self.shownPhotoIDs count], self.shownPhotoIDs);
+    NSLog(@"Queued (%ld): %@", [[ISSDataShare shared].queuedPhotoIDs count], [ISSDataShare shared].queuedPhotoIDs);
+    NSLog(@"Completed (%ld): %@", [[ISSDataShare shared].completedPhotoIDs count], [ISSDataShare shared].completedPhotoIDs);
     // If we have queued photos, use that, else recycle from completed photos ID
     NSString *photoID;
     if ([[ISSDataShare shared].queuedPhotoIDs count]) {
@@ -345,6 +362,10 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskLandscape;
+}
+
+- (void)reloadDataOnMainThread {
+    [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 /*

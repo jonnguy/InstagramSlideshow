@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+extern NSString * const kISSNotificationFetchedData;
 
 extern NSString * const kISSImagesKey;
 extern NSString * const kISSStandardResolutionKey;
@@ -22,3 +23,5 @@ extern NSString * const kISSUsernameKey;
 extern NSString * const kISSProfilePictureKey;
 extern NSString * const kISSLikesKey;
 extern NSString * const kISSCountKey;
+extern NSString * const kISSPaginationKey;
+extern NSString * const kISSNextURLKey;
