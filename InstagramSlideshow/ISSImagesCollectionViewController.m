@@ -323,9 +323,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (void)updatePhotoAtIndex:(NSInteger)index {
-    NSLog(@"Current (%ld): %@", [self.shownPhotoIDs count], self.shownPhotoIDs);
-    NSLog(@"Queued (%ld): %@", [[ISSDataShare shared].queuedPhotoIDs count], [ISSDataShare shared].queuedPhotoIDs);
-    NSLog(@"Completed (%ld): %@", [[ISSDataShare shared].completedPhotoIDs count], [ISSDataShare shared].completedPhotoIDs);
+//    NSLog(@"Current (%ld): %@", [self.shownPhotoIDs count], self.shownPhotoIDs);
+//    NSLog(@"Queued (%ld): %@", [[ISSDataShare shared].queuedPhotoIDs count], [ISSDataShare shared].queuedPhotoIDs);
+//    NSLog(@"Completed (%ld): %@", [[ISSDataShare shared].completedPhotoIDs count], [ISSDataShare shared].completedPhotoIDs);
     // If we have queued photos, use that, else recycle from completed photos ID
     NSString *photoID;
     if ([[ISSDataShare shared].queuedPhotoIDs count]) {
