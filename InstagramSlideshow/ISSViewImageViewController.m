@@ -81,6 +81,21 @@
     [text addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(rangeOfSpace.location, text.length-rangeOfSpace.location)];
     [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18.0] range:NSMakeRange(rangeOfSpace.location, text.length-rangeOfSpace.location)];
     
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#(\\w+)" options:0 error:&error];
+    NSArray *matches = [regex matchesInString:self.commentLabel.text options:0 range:NSMakeRange(0, self.commentLabel.text.length)];
+    for (NSTextCheckingResult *match in matches) {
+        NSRange wordRange = match.range;
+        [text addAttribute:NSForegroundColorAttributeName value:[UIColor instagramColor] range:wordRange];
+    }
+    
+    regex = [NSRegularExpression regularExpressionWithPattern:@"@(\\w+)" options:0 error:&error];
+    matches = [regex matchesInString:self.commentLabel.text options:0 range:NSMakeRange(0, self.commentLabel.text.length)];
+    for (NSTextCheckingResult *match in matches) {
+        NSRange wordRange = match.range;
+        [text addAttribute:NSForegroundColorAttributeName value:[UIColor instagramColor] range:wordRange];
+    }
+    
     [self.commentLabel setAttributedText: text];
 
     // Gesture recognizer to dismiss the view
@@ -106,6 +121,11 @@
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskLandscape;
+}
+
 
 /*
  #pragma mark - Navigation

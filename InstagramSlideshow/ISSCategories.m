@@ -11,7 +11,7 @@
 @implementation UIColor (ISSColor)
 
 + (UIColor *)instagramColor {
-    return [UIColor colorWithRed:18.0 green:86.0 blue:136.0 alpha:1.0];
+    return [UIColor colorWithRed:14.0/255.0 green:48.0/255.0 blue:99.0/255.0 alpha:1.0];
 }
 
 @end
