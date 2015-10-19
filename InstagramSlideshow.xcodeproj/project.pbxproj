@@ -610,6 +610,7 @@
 				3459089B1BD0DC3400DCBDD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		34594AD41BCCE84F0000D908 /* Build configuration list for PBXProject "InstagramSlideshow" */ = {
 			isa = XCConfigurationList;
