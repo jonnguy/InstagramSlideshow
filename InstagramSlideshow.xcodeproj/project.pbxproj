@@ -27,9 +27,6 @@
 		34594B001BCCF2510000D908 /* ISSImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34594AFF1BCCF2510000D908 /* ISSImageCollectionViewCell.m */; };
 		34594B031BCCF4110000D908 /* ISSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 34594B021BCCF4110000D908 /* ISSConstants.m */; };
 		346FE3B71BCE0B820003C1BC /* ISSViewImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */; };
-		346FE3BA1BCE0D3B0003C1BC /* ISSTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */; };
-		346FE3BD1BCE0EC60003C1BC /* ISSDismissalAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */; };
-		346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */; };
 		346FE3EB1BCF57A70003C1BC /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3CB1BCF57A70003C1BC /* MKAnnotationView+WebCache.m */; };
 		346FE3EC1BCF57A70003C1BC /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3CD1BCF57A70003C1BC /* NSData+ImageContentType.m */; };
 		346FE3ED1BCF57A70003C1BC /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3CF1BCF57A70003C1BC /* SDImageCache.m */; };
@@ -85,12 +82,6 @@
 		34594B021BCCF4110000D908 /* ISSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSConstants.m; sourceTree = "<group>"; };
 		346FE3B51BCE0B810003C1BC /* ISSViewImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSViewImageViewController.h; sourceTree = "<group>"; };
 		346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSViewImageViewController.m; sourceTree = "<group>"; };
-		346FE3B81BCE0D3B0003C1BC /* ISSTransitioningDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSTransitioningDelegate.h; sourceTree = "<group>"; };
-		346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSTransitioningDelegate.m; sourceTree = "<group>"; };
-		346FE3BB1BCE0EC60003C1BC /* ISSDismissalAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSDismissalAnimator.h; sourceTree = "<group>"; };
-		346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSDismissalAnimator.m; sourceTree = "<group>"; };
-		346FE3BE1BCE0ECF0003C1BC /* ISSPresentationAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSPresentationAnimator.h; sourceTree = "<group>"; };
-		346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSPresentationAnimator.m; sourceTree = "<group>"; };
 		346FE3CA1BCF57A70003C1BC /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		346FE3CB1BCF57A70003C1BC /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
 		346FE3CC1BCF57A70003C1BC /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -234,12 +225,6 @@
 			children = (
 				344639C51BD78E200049192C /* RMPZoomTransitionAnimator.h */,
 				344639C61BD78E200049192C /* RMPZoomTransitionAnimator.m */,
-				346FE3B81BCE0D3B0003C1BC /* ISSTransitioningDelegate.h */,
-				346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */,
-				346FE3BB1BCE0EC60003C1BC /* ISSDismissalAnimator.h */,
-				346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */,
-				346FE3BE1BCE0ECF0003C1BC /* ISSPresentationAnimator.h */,
-				346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */,
 			);
 			name = Animators;
 			sourceTree = "<group>";
@@ -396,16 +381,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				346FE3BD1BCE0EC60003C1BC /* ISSDismissalAnimator.m in Sources */,
 				346FE3F71BCF57A70003C1BC /* UIImage+WebP.m in Sources */,
 				34594AF71BCCE9670000D908 /* InstagramSlideshowPrefix.pch in Sources */,
 				34594AE11BCCE84F0000D908 /* ISSAppDelegate.m in Sources */,
-				346FE3BA1BCE0D3B0003C1BC /* ISSTransitioningDelegate.m in Sources */,
 				34594B001BCCF2510000D908 /* ISSImageCollectionViewCell.m in Sources */,
 				34594AF61BCCE92E0000D908 /* ISSInstagramLoginViewController.m in Sources */,
 				346FE3F11BCF57A70003C1BC /* SDWebImageDownloaderOperation.m in Sources */,
 				346FE3ED1BCF57A70003C1BC /* SDImageCache.m in Sources */,
-				346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */,
 				34594ADE1BCCE84F0000D908 /* main.m in Sources */,
 				34594B031BCCF4110000D908 /* ISSConstants.m in Sources */,
 				346FE3EE1BCF57A70003C1BC /* SDWebImageCompat.m in Sources */,

@@ -8,11 +8,7 @@
 
 #import "ISSImagesCollectionViewController.h"
 #import "ISSImageCollectionViewCell.h"
-#import "ISSTransitioningDelegate.h"
 #import "ISSViewImageViewController.h"
-
-#import "ISSDismissalAnimator.h"
-#import "ISSPresentationAnimator.h"
 
 @interface ISSImagesCollectionViewController () <UIWebViewDelegate, NSURLSessionDelegate, UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate, UIPickerViewDelegate>
 
@@ -344,14 +340,10 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
     // minimum implementation for example
     RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
-//    animator.openingFrame = self.openingFrame;
     animator.goingForward = YES;
     animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)source;
     animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)presented;
     return animator;
-//    ISSPresentationAnimator *animator = [[ISSPresentationAnimator alloc] init];
-//    animator.openingFrame = self.openingFrame;
-//    return animator;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
@@ -362,9 +354,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
     animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)dismissed;
     animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)self;
     return animator;
-//    ISSDismissalAnimator *animator = [[ISSDismissalAnimator alloc] init];
-//    animator.openingFrame = self.openingFrame;
-//    return animator;
 }
 
 - (BOOL)prefersStatusBarHidden {
