@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RMPZoomTransitionAnimator.h"
 
-@interface ISSViewImageViewController : UIViewController
+@interface ISSViewImageViewController : UIViewController <RMPZoomTransitionAnimating>
 
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 @property (nonatomic, strong) NSString *imageID;

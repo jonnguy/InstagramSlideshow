@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		344639C71BD78E200049192C /* RMPZoomTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 344639C61BD78E200049192C /* RMPZoomTransitionAnimator.m */; };
 		345908801BD0CC9700DCBDD4 /* ISSTextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459087F1BD0CC9700DCBDD4 /* ISSTextFieldViewController.m */; };
 		345908891BD0DC3400DCBDD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 345908881BD0DC3400DCBDD4 /* main.m */; };
 		3459088C1BD0DC3400DCBDD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459088B1BD0DC3400DCBDD4 /* AppDelegate.m */; };
@@ -50,6 +51,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		344639C51BD78E200049192C /* RMPZoomTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPZoomTransitionAnimator.h; sourceTree = "<group>"; };
+		344639C61BD78E200049192C /* RMPZoomTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPZoomTransitionAnimator.m; sourceTree = "<group>"; };
 		3459087E1BD0CC9700DCBDD4 /* ISSTextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSTextFieldViewController.h; sourceTree = "<group>"; };
 		3459087F1BD0CC9700DCBDD4 /* ISSTextFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSTextFieldViewController.m; sourceTree = "<group>"; };
 		345908851BD0DC3400DCBDD4 /* JustAuth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JustAuth.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +237,8 @@
 		346FE3C11BCE0F9B0003C1BC /* Animators */ = {
 			isa = PBXGroup;
 			children = (
+				344639C51BD78E200049192C /* RMPZoomTransitionAnimator.h */,
+				344639C61BD78E200049192C /* RMPZoomTransitionAnimator.m */,
 				346FE3B81BCE0D3B0003C1BC /* ISSTransitioningDelegate.h */,
 				346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */,
 				346FE3BB1BCE0EC60003C1BC /* ISSDismissalAnimator.h */,
@@ -412,6 +417,7 @@
 				346FE3EE1BCF57A70003C1BC /* SDWebImageCompat.m in Sources */,
 				346FE3EC1BCF57A70003C1BC /* NSData+ImageContentType.m in Sources */,
 				34594AFA1BCCEAD40000D908 /* ISSImagesCollectionViewController.m in Sources */,
+				344639C71BD78E200049192C /* RMPZoomTransitionAnimator.m in Sources */,
 				346FE3F21BCF57A70003C1BC /* SDWebImageManager.m in Sources */,
 				346FE3F01BCF57A70003C1BC /* SDWebImageDownloader.m in Sources */,
 				346FE3F91BCF57A70003C1BC /* UIImageView+WebCache.m in Sources */,

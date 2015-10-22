@@ -11,5 +11,6 @@
 @interface ISSImageCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, strong) NSString *imageUrl;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end

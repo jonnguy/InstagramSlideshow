@@ -126,6 +126,19 @@
     return UIInterfaceOrientationMaskLandscape;
 }
 
+- (UIImageView *)transitionSourceImageView {
+    return self.mainImageView;
+}
+
+- (UIColor *)transitionSourceBackgroundColor {
+    return [UIColor clearColor];
+}
+
+- (CGRect)transitionDestinationImageViewFrame {
+    return self.mainImageView.frame;
+}
+
+
 
 /*
  #pragma mark - Navigation

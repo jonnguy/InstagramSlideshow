@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RMPZoomTransitionAnimator.h"
 
-@interface ISSImagesCollectionViewController : UICollectionViewController
-
+@interface ISSImagesCollectionViewController : UICollectionViewController <RMPZoomTransitionAnimating>
 @end

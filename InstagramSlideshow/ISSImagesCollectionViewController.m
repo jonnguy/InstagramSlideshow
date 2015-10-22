@@ -285,8 +285,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    UIImageView *recipeImageView = [[UIImageView alloc] init];
-    
     NSString *photoID = self.shownPhotoIDs[indexPath.row];
     NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];
     
@@ -294,10 +292,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 //    NSString *imageURL = [ISSDataShare shared].filteredData[photoID][kISSImagesKey];
 //    NSLog(@"Image URL: %@", imageURL);
     cell.imageUrl = imageURL;
-    
-    [recipeImageView sd_setImageWithURL:[NSURL URLWithString:imageURL]];
-    recipeImageView.frame = cell.bounds;
-    [cell addSubview:recipeImageView];
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:imageURL]];
     
     return cell;
 }
@@ -312,8 +307,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
     }
     UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
     CGRect attributesFrame = attr.frame;
-    CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];
-    self.openingFrame = frameToOpenFrom;
+//    CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];
+    self.openingFrame = cell.frame;
     
     NSString *photoID = self.shownPhotoIDs[indexPath.row];
     NSLog(@"Tapped photo ID: %@", photoID);
@@ -355,12 +350,27 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 #pragma mark Animation
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-    ISSPresentationAnimator *animator = [[ISSPresentationAnimator alloc] init];
-    animator.openingFrame = self.openingFrame;
+    // minimum implementation for example
+//    RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
+//    animator.goingForward = YES;
+//    animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)source;
+//    animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)presented;
+//    return animator;
+    RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
+//    animator.openingFrame = self.openingFrame;
+    animator.goingForward = YES;
+    animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)source;
+    animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)presented;
     return animator;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    // minimum implementation for example
+//    RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
+//    animator.goingForward = NO;
+//    animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)dismissed;
+//    animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)self;
+//    return animator;
     ISSDismissalAnimator *animator = [[ISSDismissalAnimator alloc] init];
     animator.openingFrame = self.openingFrame;
     return animator;
@@ -368,6 +378,27 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
+}
+
+- (UIImageView *)transitionSourceImageView {
+    NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
+    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:selectedIndexPath];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:cell.imageView.image];
+    imageView.contentMode = cell.imageView.contentMode;
+    imageView.clipsToBounds = YES;
+    imageView.userInteractionEnabled = NO;
+    imageView.frame = [cell.imageView convertRect:cell.imageView.frame toView:self.collectionView.superview];
+    return imageView;
+}
+
+- (UIColor *)transitionSourceBackgroundColor {
+    return [UIColor clearColor];
+}
+
+- (CGRect)transitionDestinationImageViewFrame {
+    NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
+    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:selectedIndexPath];
+    return cell.imageView.frame;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
