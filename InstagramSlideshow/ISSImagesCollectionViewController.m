@@ -10,7 +10,6 @@
 #import "ISSImageCollectionViewCell.h"
 #import "ISSTransitioningDelegate.h"
 #import "ISSViewImageViewController.h"
-#import "ISSExternalDisplayCollectionViewController.h"
 
 #import "ISSDismissalAnimator.h"
 #import "ISSPresentationAnimator.h"
@@ -23,9 +22,6 @@
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property (nonatomic, assign) CGRect openingFrame;
-@property (nonatomic, strong) UIScreen *externalScreen;
-@property (nonatomic, strong) UIWindow *externalWindow;
-@property (nonatomic, strong) NSArray *availableModes;
 
 @property (nonatomic, strong) NSMutableArray *shownPhotoIDs;
 @property (nonatomic, strong) NSTimer *timer;
@@ -33,8 +29,6 @@
 
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 @property (nonatomic, assign) CGRect selectedFrame;
-
-@property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplayViewController;
 
 @end
 
@@ -64,12 +58,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
         [ISSDataShare shared].secondAuthToken = possiblyOtherAPIString;
         NSLog(@"Other API key that we're using: %@", [ISSDataShare shared].secondAuthToken);
     }
-
-    UICollectionViewFlowLayout *aFlowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [aFlowLayout setItemSize:CGSizeMake(200, 140)];
-    [aFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.externalDisplayViewController = [[ISSExternalDisplayCollectionViewController alloc] initWithCollectionViewLayout:aFlowLayout];
-    self.externalWindow = [[UIWindow alloc] init];
     
     self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     

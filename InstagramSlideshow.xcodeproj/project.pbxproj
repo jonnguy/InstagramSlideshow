@@ -30,7 +30,6 @@
 		346FE3BA1BCE0D3B0003C1BC /* ISSTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3B91BCE0D3B0003C1BC /* ISSTransitioningDelegate.m */; };
 		346FE3BD1BCE0EC60003C1BC /* ISSDismissalAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */; };
 		346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */; };
-		346FE3C41BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */; };
 		346FE3EB1BCF57A70003C1BC /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3CB1BCF57A70003C1BC /* MKAnnotationView+WebCache.m */; };
 		346FE3EC1BCF57A70003C1BC /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3CD1BCF57A70003C1BC /* NSData+ImageContentType.m */; };
 		346FE3ED1BCF57A70003C1BC /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FE3CF1BCF57A70003C1BC /* SDImageCache.m */; };
@@ -92,8 +91,6 @@
 		346FE3BC1BCE0EC60003C1BC /* ISSDismissalAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSDismissalAnimator.m; sourceTree = "<group>"; };
 		346FE3BE1BCE0ECF0003C1BC /* ISSPresentationAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSPresentationAnimator.h; sourceTree = "<group>"; };
 		346FE3BF1BCE0ECF0003C1BC /* ISSPresentationAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSPresentationAnimator.m; sourceTree = "<group>"; };
-		346FE3C21BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSExternalDisplayCollectionViewController.h; sourceTree = "<group>"; };
-		346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSExternalDisplayCollectionViewController.m; sourceTree = "<group>"; };
 		346FE3CA1BCF57A70003C1BC /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		346FE3CB1BCF57A70003C1BC /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
 		346FE3CC1BCF57A70003C1BC /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -210,8 +207,6 @@
 				34594AF91BCCEAD40000D908 /* ISSImagesCollectionViewController.m */,
 				34594AF41BCCE92E0000D908 /* ISSInstagramLoginViewController.h */,
 				34594AF51BCCE92E0000D908 /* ISSInstagramLoginViewController.m */,
-				346FE3C21BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.h */,
-				346FE3C31BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m */,
 				346FE3B51BCE0B810003C1BC /* ISSViewImageViewController.h */,
 				346FE3B61BCE0B820003C1BC /* ISSViewImageViewController.m */,
 				3459087E1BD0CC9700DCBDD4 /* ISSTextFieldViewController.h */,
@@ -409,7 +404,6 @@
 				34594B001BCCF2510000D908 /* ISSImageCollectionViewCell.m in Sources */,
 				34594AF61BCCE92E0000D908 /* ISSInstagramLoginViewController.m in Sources */,
 				346FE3F11BCF57A70003C1BC /* SDWebImageDownloaderOperation.m in Sources */,
-				346FE3C41BCE1DAB0003C1BC /* ISSExternalDisplayCollectionViewController.m in Sources */,
 				346FE3ED1BCF57A70003C1BC /* SDImageCache.m in Sources */,
 				346FE3C01BCE0ECF0003C1BC /* ISSPresentationAnimator.m in Sources */,
 				34594ADE1BCCE84F0000D908 /* main.m in Sources */,
