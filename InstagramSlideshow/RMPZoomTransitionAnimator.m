@@ -20,14 +20,13 @@
 
 #import "RMPZoomTransitionAnimator.h"
 #import "ISSViewImageViewController.h"
+#import "ISSImagesCollectionViewController.h"
 
 @implementation RMPZoomTransitionAnimator
 
 // constants for transition animation
 static const NSTimeInterval kForwardAnimationDuration         = 0.55;
-//static const NSTimeInterval kForwardCompleteAnimationDuration = ;
-static const NSTimeInterval kBackwardAnimationDuration         = 0.55;
-static const NSTimeInterval kBackwardCompleteAnimationDuration = 1.0;
+static const NSTimeInterval kBackwardAnimationDuration        = 0.55;
 
 #pragma mark - <UIViewControllerAnimatedTransitioning>
 
@@ -42,8 +41,16 @@ static const NSTimeInterval kBackwardCompleteAnimationDuration = 1.0;
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
+    if (self.goingForward) {
+        [self zoomInWithContext:transitionContext];
+    } else {
+        [self zoomOutWithContext:transitionContext];
+    }
+}
+
+- (void)zoomInWithContext:(id<UIViewControllerContextTransitioning>)transitionContext {
     // Setup for animation transition
-    UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    ISSImagesCollectionViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     ISSViewImageViewController *toVC   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *containerView    = [transitionContext containerView];
     [containerView addSubview:fromVC.view];
@@ -67,70 +74,55 @@ static const NSTimeInterval kBackwardCompleteAnimationDuration = 1.0;
     [containerView addSubview:sourceImageView];
     
     [toVC.view setAlpha:0];
-    
-    if (self.goingForward) {
-        [toVC.mainImageView setHidden:YES];
+    [toVC.mainImageView setHidden:YES];
         [UIView animateWithDuration:kForwardAnimationDuration
                               delay:0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
                              sourceImageView.frame = [self.destinationTransition transitionDestinationImageViewFrame];
                              
-//                             sourceImageView.transform = CGAffineTransformMakeScale(1.02, 1.02);
                              [toVC.view setAlpha:1];
                              alphaView.alpha = 0.9;
                          }
                          completion:^(BOOL finished) {
                              alphaView.alpha = 0;
                              sourceImageView.alpha = 0;
-                             [toVC.mainImageView setHidden:NO];
+                              [toVC.mainImageView setHidden:NO];
                              
                              [transitionContext completeTransition:YES];
-//                             [UIView animateWithDuration:kForwardCompleteAnimationDuration
-//                                                   delay:0
-//                                                 options:UIViewAnimationOptionCurveEaseOut
-//                                              animations:^{
-//                                                  alphaView.alpha = 0;
-//                                                  sourceImageView.transform = CGAffineTransformIdentity;
-//                                              }
-//                                              completion:^(BOOL finished) {
-//                                                  sourceImageView.alpha = 0;
-//                                                  if ([self.destinationTransition conformsToProtocol:@protocol(RMPZoomTransitionAnimating)] &&
-//                                                      [self.destinationTransition respondsToSelector:@selector(zoomTransitionAnimator:didCompleteTransition:animatingSourceImageView:)]) {
-//                                                      [self.destinationTransition zoomTransitionAnimator:self
-//                                                                                   didCompleteTransition:![transitionContext transitionWasCancelled]
-//                                                                                animatingSourceImageView:sourceImageView];
-//                                                  }
-//                                                  [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
-//                                              }];
                          }];
-        
-    } else {
-        [UIView animateWithDuration:kBackwardAnimationDuration
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseOut
-                         animations:^{
-                             sourceImageView.frame = [self.destinationTransition transitionDestinationImageViewFrame];
-                             alphaView.alpha = 0;
-                         }
-                         completion:^(BOOL finished) {
-                             [UIView animateWithDuration:kBackwardCompleteAnimationDuration
-                                                   delay:0
-                                                 options:UIViewAnimationOptionCurveEaseOut
-                                              animations:^{
-                                                  sourceImageView.alpha = 0;
-                                              }
-                                              completion:^(BOOL finished) {
-                                                  if ([self.destinationTransition conformsToProtocol:@protocol(RMPZoomTransitionAnimating)] &&
-                                                      [self.destinationTransition respondsToSelector:@selector(zoomTransitionAnimator:didCompleteTransition:animatingSourceImageView:)]) {
-                                                      [self.destinationTransition zoomTransitionAnimator:self
-                                                                                   didCompleteTransition:![transitionContext transitionWasCancelled]
-                                                                                animatingSourceImageView:sourceImageView];
-                                                  }
-                                                  [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
-                                              }];
-                         }];
-    }
+
+}
+
+- (void)zoomOutWithContext:(id<UIViewControllerContextTransitioning>)transitionContext {
+    ISSViewImageViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    ISSImagesCollectionViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIView *containerView = [transitionContext containerView];
+    
+    // Add a alphaView To be overexposed, so background becomes dark in animation
+    UIView *alphaView = [fromVC.mainImageView resizableSnapshotViewFromRect:fromVC.mainImageView.bounds afterScreenUpdates:YES withCapInsets:UIEdgeInsetsZero];
+    [alphaView setFrame:[self.sourceTransition transitionDestinationImageViewFrame]];
+    alphaView.backgroundColor = [UIColor whiteColor];
+    [containerView addSubview:toVC.view];
+    [containerView addSubview:alphaView];
+    
+    [fromVC.view setAlpha:1];
+    [toVC.view setAlpha:0];
+    
+    [UIView animateWithDuration:kBackwardAnimationDuration animations:^{
+        alphaView.frame = self.openingFrame;
+//        [fromVC.view setAlpha:0];
+        [toVC.view setAlpha:1];
+    } completion:^(BOOL finished) {
+        [alphaView removeFromSuperview];
+        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+    }];
+    
+    
+    [UIView animateWithDuration:0.40 animations:^{
+        [fromVC.view setAlpha:0];
+    } completion:^(BOOL finished) {
+    }];
 }
 
 @end

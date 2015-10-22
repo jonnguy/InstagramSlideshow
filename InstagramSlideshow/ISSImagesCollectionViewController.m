@@ -30,7 +30,9 @@
 @property (nonatomic, strong) NSMutableArray *shownPhotoIDs;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) BOOL tappedOnce;
+
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, assign) CGRect selectedFrame;
 
 @property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplayViewController;
 
@@ -366,14 +368,15 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     // minimum implementation for example
-//    RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
-//    animator.goingForward = NO;
-//    animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)dismissed;
-//    animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)self;
-//    return animator;
-    ISSDismissalAnimator *animator = [[ISSDismissalAnimator alloc] init];
+    RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
+    animator.goingForward = NO;
     animator.openingFrame = self.openingFrame;
+    animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)dismissed;
+    animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)self;
     return animator;
+//    ISSDismissalAnimator *animator = [[ISSDismissalAnimator alloc] init];
+//    animator.openingFrame = self.openingFrame;
+//    return animator;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -381,7 +384,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (UIImageView *)transitionSourceImageView {
-//    NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:cell.imageView.image];
     imageView.contentMode = cell.imageView.contentMode;
@@ -396,9 +398,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (CGRect)transitionDestinationImageViewFrame {
-    NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
-    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:selectedIndexPath];
-    return cell.imageView.frame;
+//    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
+//    return cell.imageView.frame;
+    return self.selectedFrame;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {

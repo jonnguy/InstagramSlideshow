@@ -93,6 +93,9 @@
  */
 @property (nonatomic) BOOL goingForward;
 
+
+@property (nonatomic, assign) CGRect openingFrame;
+
 /**
  The animator's delegate for transition in source view controller.
  
