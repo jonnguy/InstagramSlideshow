@@ -353,17 +353,15 @@ static NSString * const reuseIdentifier = @"ImageCell";
 #pragma mark Animation
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
     // minimum implementation for example
-//    RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
-//    animator.goingForward = YES;
-//    animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)source;
-//    animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)presented;
-//    return animator;
     RMPZoomTransitionAnimator *animator = [[RMPZoomTransitionAnimator alloc] init];
 //    animator.openingFrame = self.openingFrame;
     animator.goingForward = YES;
     animator.sourceTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)source;
     animator.destinationTransition = (id<RMPZoomTransitionAnimating, RMPZoomTransitionDelegate>)presented;
     return animator;
+//    ISSPresentationAnimator *animator = [[ISSPresentationAnimator alloc] init];
+//    animator.openingFrame = self.openingFrame;
+//    return animator;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {

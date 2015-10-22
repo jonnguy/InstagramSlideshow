@@ -324,6 +324,7 @@
                     </view>
                     <connections>
                         <outlet property="commentLabel" destination="P8D-Ll-HnL" id="P1M-i3-BIi"/>
+                        <outlet property="containerView" destination="rdt-kb-KCc" id="87s-Ir-ogJ"/>
                         <outlet property="likesLabel" destination="4gl-Aa-SBv" id="8HB-ls-3mu"/>
                         <outlet property="mainImageView" destination="Tfk-hg-0la" id="lJ2-Q7-qCh"/>
                         <outlet property="profilePictureImageView" destination="Hb1-m0-2s8" id="kES-Js-K4d"/>

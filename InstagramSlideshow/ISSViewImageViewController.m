@@ -135,7 +135,8 @@
 }
 
 - (CGRect)transitionDestinationImageViewFrame {
-    return self.mainImageView.frame;
+    return CGRectMake(237.5, 70.5, 549, 549);
+//    return [self.containerView convertRect:self.mainImageView.frame toView:self.view];
 }
 
 

@@ -11,6 +11,7 @@
 
 @interface ISSViewImageViewController : UIViewController <RMPZoomTransitionAnimating>
 
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 @property (nonatomic, strong) NSString *imageID;
 

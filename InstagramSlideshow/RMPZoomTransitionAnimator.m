@@ -19,13 +19,14 @@
 // THE SOFTWARE.
 
 #import "RMPZoomTransitionAnimator.h"
+#import "ISSViewImageViewController.h"
 
 @implementation RMPZoomTransitionAnimator
 
 // constants for transition animation
-static const NSTimeInterval kForwardAnimationDuration         = 1.0;
-static const NSTimeInterval kForwardCompleteAnimationDuration = 1.0;
-static const NSTimeInterval kBackwardAnimationDuration         = 1.0;
+static const NSTimeInterval kForwardAnimationDuration         = 0.55;
+//static const NSTimeInterval kForwardCompleteAnimationDuration = ;
+static const NSTimeInterval kBackwardAnimationDuration         = 0.55;
 static const NSTimeInterval kBackwardCompleteAnimationDuration = 1.0;
 
 #pragma mark - <UIViewControllerAnimatedTransitioning>
@@ -33,9 +34,9 @@ static const NSTimeInterval kBackwardCompleteAnimationDuration = 1.0;
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
 {
     if (self.goingForward) {
-        return kForwardAnimationDuration + kForwardCompleteAnimationDuration;
+        return kForwardAnimationDuration ;
     } else {
-        return kBackwardAnimationDuration + kBackwardCompleteAnimationDuration;
+        return kBackwardAnimationDuration ;
     }
 }
 
@@ -43,12 +44,12 @@ static const NSTimeInterval kBackwardCompleteAnimationDuration = 1.0;
 {
     // Setup for animation transition
     UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    UIViewController *toVC   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    ISSViewImageViewController *toVC   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *containerView    = [transitionContext containerView];
     [containerView addSubview:fromVC.view];
     [containerView addSubview:toVC.view];
     
-    // Without animation when you have not confirm the protocol
+    // Without animation when you have not confirm the protocol
     Protocol *animating = @protocol(RMPZoomTransitionAnimating);
     BOOL doesNotConfirmProtocol = ![self.sourceTransition conformsToProtocol:animating] || ![self.destinationTransition conformsToProtocol:animating];
     if (doesNotConfirmProtocol) {
@@ -65,33 +66,43 @@ static const NSTimeInterval kBackwardCompleteAnimationDuration = 1.0;
     UIImageView *sourceImageView = [self.sourceTransition transitionSourceImageView];
     [containerView addSubview:sourceImageView];
     
+    [toVC.view setAlpha:0];
+    
     if (self.goingForward) {
+        [toVC.mainImageView setHidden:YES];
         [UIView animateWithDuration:kForwardAnimationDuration
                               delay:0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
                              sourceImageView.frame = [self.destinationTransition transitionDestinationImageViewFrame];
-                             sourceImageView.transform = CGAffineTransformMakeScale(1.02, 1.02);
+                             
+//                             sourceImageView.transform = CGAffineTransformMakeScale(1.02, 1.02);
+                             [toVC.view setAlpha:1];
                              alphaView.alpha = 0.9;
                          }
                          completion:^(BOOL finished) {
-                             [UIView animateWithDuration:kForwardCompleteAnimationDuration
-                                                   delay:0
-                                                 options:UIViewAnimationOptionCurveEaseOut
-                                              animations:^{
-                                                  alphaView.alpha = 0;
-                                                  sourceImageView.transform = CGAffineTransformIdentity;
-                                              }
-                                              completion:^(BOOL finished) {
-                                                  sourceImageView.alpha = 0;
-                                                  if ([self.destinationTransition conformsToProtocol:@protocol(RMPZoomTransitionAnimating)] &&
-                                                      [self.destinationTransition respondsToSelector:@selector(zoomTransitionAnimator:didCompleteTransition:animatingSourceImageView:)]) {
-                                                      [self.destinationTransition zoomTransitionAnimator:self
-                                                                                   didCompleteTransition:![transitionContext transitionWasCancelled]
-                                                                                animatingSourceImageView:sourceImageView];
-                                                  }
-                                                  [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
-                                              }];
+                             alphaView.alpha = 0;
+                             sourceImageView.alpha = 0;
+                             [toVC.mainImageView setHidden:NO];
+                             
+                             [transitionContext completeTransition:YES];
+//                             [UIView animateWithDuration:kForwardCompleteAnimationDuration
+//                                                   delay:0
+//                                                 options:UIViewAnimationOptionCurveEaseOut
+//                                              animations:^{
+//                                                  alphaView.alpha = 0;
+//                                                  sourceImageView.transform = CGAffineTransformIdentity;
+//                                              }
+//                                              completion:^(BOOL finished) {
+//                                                  sourceImageView.alpha = 0;
+//                                                  if ([self.destinationTransition conformsToProtocol:@protocol(RMPZoomTransitionAnimating)] &&
+//                                                      [self.destinationTransition respondsToSelector:@selector(zoomTransitionAnimator:didCompleteTransition:animatingSourceImageView:)]) {
+//                                                      [self.destinationTransition zoomTransitionAnimator:self
+//                                                                                   didCompleteTransition:![transitionContext transitionWasCancelled]
+//                                                                                animatingSourceImageView:sourceImageView];
+//                                                  }
+//                                                  [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+//                                              }];
                          }];
         
     } else {
