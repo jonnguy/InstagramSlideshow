@@ -30,6 +30,7 @@
 @property (nonatomic, strong) NSMutableArray *shownPhotoIDs;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) BOOL tappedOnce;
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 
 @property (nonatomic, strong) ISSExternalDisplayCollectionViewController *externalDisplayViewController;
 
@@ -299,6 +300,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    self.selectedIndexPath = indexPath;
     
     self.tappedOnce = YES; // BOOL to start auto-tapping after the first one
     
@@ -381,8 +383,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (UIImageView *)transitionSourceImageView {
-    NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
-    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:selectedIndexPath];
+//    NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
+    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:cell.imageView.image];
     imageView.contentMode = cell.imageView.contentMode;
     imageView.clipsToBounds = YES;

@@ -45,7 +45,7 @@
     
     [containerView addSubview:toViewController.view];
     
-    [UIView animateWithDuration:animationDuration delay:0.0 usingSpringWithDamping:1.0 initialSpringVelocity:1.0 options:UIViewAnimationOptionTransitionNone animations:^{
+    [UIView animateWithDuration:animationDuration delay:0.0 usingSpringWithDamping:0.0 initialSpringVelocity:1.0 options:UIViewAnimationOptionTransitionNone animations:^{
         sourceImageView.frame = [toViewController transitionDestinationImageViewFrame];
     } completion:^(BOOL finished) {
         [sourceImageView removeFromSuperview];
