@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property (nonatomic, assign) CGRect openingFrame;
+@property (nonatomic, strong) UIImageView *sourceImageView;
 
 @property (nonatomic, strong) NSMutableArray *shownPhotoIDs;
 @property (nonatomic, strong) NSTimer *fetchWhenEmptyTimer;
@@ -190,7 +191,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
         if (error) {
             NSLog(@"Error fetching images with tag: %@", error.localizedDescription);
         } else {
-            for (int i = 0; i < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0; i++) {
+            for (int i = 0; i < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0 && self.shownPhotoIDs.count <= 20; i++) {
                 [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
             }
             
@@ -276,16 +277,14 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    self.selectedIndexPath = indexPath;
     
     self.tappedOnce = YES; // BOOL to start auto-tapping after the first one
     
     if (!cell) {
         return;
     }
-    UICollectionViewLayoutAttributes *attr = [collectionView layoutAttributesForItemAtIndexPath:indexPath];
-    CGRect attributesFrame = attr.frame;
-//    CGRect frameToOpenFrom = [collectionView convertRect:attributesFrame toView:collectionView.superview];
+    self.selectedIndexPath = indexPath;
+    self.sourceImageView = cell.imageView;
     self.openingFrame = cell.frame;
     
     NSString *photoID = self.shownPhotoIDs[indexPath.row];
@@ -363,7 +362,9 @@ static NSString * const reuseIdentifier = @"ImageCell";
 
 - (UIImageView *)transitionSourceImageView {
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:cell.imageView.image];
+//    UIImageView *imageView = [[UIImageView alloc] initWithImage:cell.imageView.image];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:self.sourceImageView.image];
+    NSLog(@"Selected image: %@", imageView.image);
     imageView.contentMode = cell.imageView.contentMode;
     imageView.clipsToBounds = YES;
     imageView.userInteractionEnabled = NO;
