@@ -364,7 +364,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
     ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
 //    UIImageView *imageView = [[UIImageView alloc] initWithImage:cell.imageView.image];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:self.sourceImageView.image];
-    NSLog(@"Selected image: %@", imageView.image);
+//    NSLog(@"Selected image: %@", imageView.image);
     imageView.contentMode = cell.imageView.contentMode;
     imageView.clipsToBounds = YES;
     imageView.userInteractionEnabled = NO;
