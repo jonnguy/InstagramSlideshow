@@ -14,7 +14,8 @@
 
 #define INSTAGRAM_AUTHURL                               @"https://api.instagram.com/oauth/authorize/"
 #define INSTAGRAM_APIURl                                @"https://api.instagram.com/v1/users/"
-#define INSTAGRAM_APITAG                                @"https://api.instagram.com/v1/tags/benlovescrystal/media/recent?"
+//#define INSTAGRAM_APITAG                                @"https://api.instagram.com/v1/tags/dimsum/media/recent?count=40&"
+#define INSTAGRAM_APITAG                                @"https://api.instagram.com/v1/tags/benlovescrystal/media/recent?count=40&"
 #define INSTAGRAM_CLIENT_ID                             @"96bcd618c034423d98c38b9a19806c3d"
 #define INSTAGRAM_CLIENTSERCRET                         @"93c5ccb289af4f2a967084eb83216758"
 #define INSTAGRAM_REDIRECT_URI                          @"https://www.jonnguy.com"
