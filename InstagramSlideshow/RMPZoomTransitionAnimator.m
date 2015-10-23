@@ -107,6 +107,7 @@ static const NSTimeInterval kBackwardAnimationDuration        = 0.55;
     [containerView addSubview:alphaView];
     
     [fromVC.view setAlpha:1];
+    [fromVC.mainImageView setHidden:YES];
     [toVC.view setAlpha:0];
     
     [UIView animateWithDuration:kBackwardAnimationDuration animations:^{
@@ -115,6 +116,7 @@ static const NSTimeInterval kBackwardAnimationDuration        = 0.55;
         [toVC.view setAlpha:1];
     } completion:^(BOOL finished) {
         [alphaView removeFromSuperview];
+        [fromVC.mainImageView setHidden:NO];
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
     
