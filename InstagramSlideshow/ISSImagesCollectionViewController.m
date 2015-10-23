@@ -20,7 +20,7 @@
 @property (nonatomic, assign) CGRect openingFrame;
 
 @property (nonatomic, strong) NSMutableArray *shownPhotoIDs;
-@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSTimer *fetchWhenEmptyTimer;
 @property (nonatomic, assign) BOOL tappedOnce;
 
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
@@ -41,7 +41,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(stopTimer)
+                                             selector:@selector(tappedOnce:)
                                                  name:kISSNotificationBackgrounded
                                                object:nil];
     
@@ -77,8 +77,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (void)tappedOnce:(UITapGestureRecognizer *)recognizer {
-    NSLog(@"Invalidated timer");
-    [self.timer invalidate];
+    self.tappedOnce = NO;
 }
 
 - (void)swiped:(UISwipeGestureRecognizer *)recognizer {
@@ -93,21 +92,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
     [super viewDidAppear:animated];
     
     if (self.tappedOnce) {
-        [self startTimer];
+        [self performSelector:@selector(tapRandomCell) withObject:nil afterDelay:1.5];
     }
-}
-
-- (void)startTimer {
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:3.0
-                                                  target:self
-                                                selector:@selector(tapRandomCell)
-                                                userInfo:nil
-                                                 repeats:YES];
-}
-
-- (void)stopTimer {
-    NSLog(@"Backgrounded app, stopping timer");
-    [self.timer invalidate];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -178,47 +164,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
                 [self.webView removeFromSuperview];
             });
             
-            // This should be the first fetch.
-            [[ISSDataShare shared] fetchTagImagesWithAuth:TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
-                if (error) {
-                    NSLog(@"Error fetching images with tag: %@", error.localizedDescription);
-                } else {
-                    for (int i = 0; i < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0; i++) {
-                        [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
-                    }
-                    
-                    NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
-                    if (nextURL) {
-                        [ISSDataShare shared].nextURLs[0] = nextURL;
-                    }
-                    NSLog(@"Next URL 1: %@", nextURL);
-                    [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-                }
-            }];
-            
-            // NOTE: This might work.
-            // If we have a second thing, we should also fetch
-            if ([ISSDataShare shared].secondAuthToken) {
-                NSLog(@"We have a second auth token");
-                [[ISSDataShare shared] fetchTagImagesWithAuth:SECOND_TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
-                    if (error) {
-                        NSLog(@"Error with 2nd token: %@", error.localizedDescription);
-                    } else {
-                        while ([self.shownPhotoIDs count] < 20 && [[ISSDataShare shared].queuedPhotoIDs count]) {
-                            [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
-                            });
-                        }
-                        
-                        NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
-                        if (nextURL) {
-                            [ISSDataShare shared].nextURLs[1] = nextURL;
-                        }
-                        NSLog(@"Next URL 2: %@", nextURL);
-                    }
-                }];
-            }
+            [self fetchWithBothTokens];
         }
     }];
     
@@ -226,7 +172,6 @@ static NSString * const reuseIdentifier = @"ImageCell";
 }
 
 - (void)tapRandomCell {
-    [self.timer invalidate];
     NSUInteger size = [self.shownPhotoIDs count];
     if (!size) {
         return;
@@ -236,6 +181,51 @@ static NSString * const reuseIdentifier = @"ImageCell";
         // This is so gross, but it works.
         [self collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
     });
+}
+
+- (void)fetchWithBothTokens {
+    // This should be the first fetch.
+    NSLog(@"Fetching from 1st: %@", TOKEN_COMBINED);
+    [[ISSDataShare shared] fetchTagImagesWithAuth:TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
+        if (error) {
+            NSLog(@"Error fetching images with tag: %@", error.localizedDescription);
+        } else {
+            for (int i = 0; i < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0; i++) {
+                [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
+            }
+            
+            NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
+            if (nextURL) {
+                [ISSDataShare shared].nextURLs[0] = nextURL;
+            }
+            NSLog(@"Next URL 1: %@", nextURL);
+            [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+        }
+    }];
+    
+    // NOTE: This might work.
+    // If we have a second thing, we should also fetch
+    if ([ISSDataShare shared].secondAuthToken) {
+        NSLog(@"Fetching from 2nd: %@", SECOND_TOKEN_COMBINED);
+        [[ISSDataShare shared] fetchTagImagesWithAuth:SECOND_TOKEN_COMBINED completionHandler:^(NSDictionary *dict, NSError *error) {
+            if (error) {
+                NSLog(@"Error with 2nd token: %@", error.localizedDescription);
+            } else {
+                while ([self.shownPhotoIDs count] < 20 && [[ISSDataShare shared].queuedPhotoIDs count]) {
+                    [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
+                    });
+                }
+                
+                NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
+                if (nextURL) {
+                    [ISSDataShare shared].nextURLs[1] = nextURL;
+                }
+                NSLog(@"Next URL 2: %@", nextURL);
+            }
+        }];
+    }
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -323,11 +313,22 @@ static NSString * const reuseIdentifier = @"ImageCell";
     NSString *photoID;
     if ([[ISSDataShare shared].queuedPhotoIDs count]) {
         photoID = [ISSDataShare popQueuedPhoto];
+        [self.fetchWhenEmptyTimer invalidate];
         NSLog(@"Replaced from queued (%ld): %@", (unsigned long)[[ISSDataShare shared].queuedPhotoIDs count], photoID);
         self.shownPhotoIDs[index] = photoID;
     } else {
-        // If there's no queued, just recycle from the used
+        // If there's no queued, just recycle from the used.. and try to fetch..
         photoID = [ISSDataShare popCompletedPhoto];
+        NSLog(@"No completed, starting timer");
+        
+        if (!self.fetchWhenEmptyTimer.isValid) {
+            self.fetchWhenEmptyTimer = [NSTimer scheduledTimerWithTimeInterval:20.0
+                                                                        target:self
+                                                                      selector:@selector(fetchWithBothTokens)
+                                                                      userInfo:nil
+                                                                       repeats:YES];
+        }
+        
         NSLog(@"Recycled from completed photos (%ld): %@", (unsigned long)[[ISSDataShare shared].completedPhotoIDs count], photoID);
         self.shownPhotoIDs[index] = photoID;
     }
