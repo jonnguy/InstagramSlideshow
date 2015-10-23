@@ -169,22 +169,27 @@
         // (NSString *) Images is the URL of the image, not the actual image
         dict[kISSImagesKey] = photosArray[idx][kISSImagesKey][kISSStandardResolutionKey][kISSURLKey];
         
-        // (NSString *) Caption of the picture in plain text
-        dict[kISSCaptionKey] = photosArray[idx][kISSCaptionKey][kISSTextKey];
+        // Null captions were crashing the app.
+        if ([photosArray[idx][kISSCaptionKey] isEqual:[NSNull null]]) {
+            dict[kISSCaptionKey] = @"";
+        } else {
+            // (NSString *) Caption of the picture in plain text
+            dict[kISSCaptionKey] = photosArray[idx][kISSCaptionKey][kISSTextKey];
+        }
         
         // (NSString *) Name of the poster
-        dict[kISSFullNameKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSFullNameKey];
+        dict[kISSFullNameKey] = photosArray[idx][kISSUserKey][kISSFullNameKey];
         
         // (NSString *) Username of the poster
-        dict[kISSUsernameKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSUsernameKey];
+        dict[kISSUsernameKey] = photosArray[idx][kISSUserKey][kISSUsernameKey];
         
         // (NSString *) Profile picture of poster
-        dict[kISSProfilePictureKey] = photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey];
+        dict[kISSProfilePictureKey] = photosArray[idx][kISSUserKey][kISSProfilePictureKey];
         
         // (NSNumber *) Number of likes.. get integerValue of it.
         dict[kISSLikesKey] = photosArray[idx][kISSLikesKey][kISSCountKey];
         
-        [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:photosArray[idx][kISSCaptionKey][kISSFromKey][kISSProfilePictureKey]] options:0 progress:nil completed:nil];
+        [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:photosArray[idx][kISSUserKey][kISSProfilePictureKey]] options:0 progress:nil completed:nil];
         
         // Now we should set the ID key in the dictionary to our newly formed dictionary.. This should be safe, right?
         self.filteredData[photoID] = dict;

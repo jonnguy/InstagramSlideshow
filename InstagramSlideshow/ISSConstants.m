@@ -27,3 +27,4 @@ NSString * const kISSLikesKey               = @"likes";
 NSString * const kISSCountKey               = @"count";
 NSString * const kISSPaginationKey          = @"pagination";
 NSString * const kISSNextURLKey             = @"next_url";
+NSString * const kISSUserKey                = @"user";

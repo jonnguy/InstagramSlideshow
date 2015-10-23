@@ -26,3 +26,4 @@ extern NSString * const kISSLikesKey;
 extern NSString * const kISSCountKey;
 extern NSString * const kISSPaginationKey;
 extern NSString * const kISSNextURLKey;
+extern NSString * const kISSUserKey;
