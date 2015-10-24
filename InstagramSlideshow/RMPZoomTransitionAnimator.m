@@ -117,6 +117,13 @@ static const NSTimeInterval kBackwardAnimationDuration        = 0.55;
     } completion:^(BOOL finished) {
         [alphaView removeFromSuperview];
         [fromVC.mainImageView setHidden:NO];
+        
+        if ([self.destinationTransition conformsToProtocol:@protocol(RMPZoomTransitionAnimating)] &&
+            [self.destinationTransition respondsToSelector:@selector(zoomTransitionAnimator:didCompleteTransition:)]) {
+            [self.destinationTransition zoomTransitionAnimator:self
+                                         didCompleteTransition:![transitionContext transitionWasCancelled]];
+        }
+        
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
     

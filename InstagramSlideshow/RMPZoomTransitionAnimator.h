@@ -75,8 +75,7 @@
  That will prevent the original views to be shown while animating.
  */
 - (void)zoomTransitionAnimator:(RMPZoomTransitionAnimator *)animator
-         didCompleteTransition:(BOOL)didComplete
-      animatingSourceImageView:(UIImageView *)imageView;
+         didCompleteTransition:(BOOL)didComplete;
 
 @end
 

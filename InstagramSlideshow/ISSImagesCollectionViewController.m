@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSMutableArray *imagesBeingUsed;
 @property (nonatomic, strong) NSURLSession *session;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (nonatomic, strong) NSString *tappedPhotoID;
 
 @property (nonatomic, assign) CGRect openingFrame;
 @property (nonatomic, strong) UIImageView *sourceImageView;
@@ -286,19 +287,13 @@ static NSString * const reuseIdentifier = @"ImageCell";
     self.selectedIndexPath = indexPath;
     self.sourceImageView = cell.imageView;
     self.openingFrame = cell.frame;
-    
-    NSString *photoID = self.shownPhotoIDs[indexPath.row];
-    NSLog(@"Tapped photo ID: %@", photoID);
-    // Add to photos we tapped and remove from the collection view main dict.
-    if (![[ISSDataShare shared].completedPhotoIDs containsObject:photoID]) {
-        [ISSDataShare addToCompletedPhotoIDs:photoID];
-    }
-    [self updatePhotoAtIndex:indexPath.row];
+    self.tappedPhotoID = self.shownPhotoIDs[indexPath.row];
+    NSLog(@"Tapped photo ID: %@", self.tappedPhotoID);
     
 //    NSString *photoID = [ISSDataShare shared].fetchedData[kISSDataKey][indexPath.row][kISSIDKey];
     // Set the new view controller.. Instantiate because we have a custom animation.
     ISSViewImageViewController *vc = (ISSViewImageViewController *)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"viewImageVC"];
-    vc.imageID = photoID;
+    vc.imageID = self.tappedPhotoID;
     vc.transitioningDelegate = self;
     [self presentViewController:vc animated:YES completion:nil];
     
@@ -314,13 +309,33 @@ static NSString * const reuseIdentifier = @"ImageCell";
         photoID = [ISSDataShare popQueuedPhoto];
         [self.fetchWhenEmptyTimer invalidate];
         NSLog(@"Replaced from queued (%ld): %@", (unsigned long)[[ISSDataShare shared].queuedPhotoIDs count], photoID);
-        self.shownPhotoIDs[index] = photoID;
+//        self.shownPhotoIDs[index] = photoID;
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.collectionView performBatchUpdates:^{
+//                [self.shownPhotoIDs removeObjectAtIndex:index];
+//                [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+//                [self.shownPhotoIDs addObject:photoID];
+//                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
+//            } completion:^(BOOL finished) {
+//                //
+//            }];
+//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView performBatchUpdates:^{
+                [self.shownPhotoIDs removeObjectAtIndex:index];
+                [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+                [self.shownPhotoIDs insertObject:photoID atIndex:index];
+                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+            } completion:^(BOOL finished) {
+                //
+            }];
+        });
     } else {
         // If there's no queued, just recycle from the used.. and try to fetch..
         photoID = [ISSDataShare popCompletedPhoto];
-        NSLog(@"No completed, starting timer");
         
         if (!self.fetchWhenEmptyTimer.isValid) {
+            NSLog(@"No completed, starting timer");
             self.fetchWhenEmptyTimer = [NSTimer scheduledTimerWithTimeInterval:20.0
                                                                         target:self
                                                                       selector:@selector(fetchWithBothTokens)
@@ -380,6 +395,14 @@ static NSString * const reuseIdentifier = @"ImageCell";
 //    ISSImageCollectionViewCell *cell = (ISSImageCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
 //    return cell.imageView.frame;
     return self.selectedFrame;
+}
+
+- (void)zoomTransitionAnimator:(RMPZoomTransitionAnimator *)animator didCompleteTransition:(BOOL)didComplete {
+    // Add to photos we tapped and remove from the collection view main dict.
+    if (![[ISSDataShare shared].completedPhotoIDs containsObject:self.tappedPhotoID]) {
+        [ISSDataShare addToCompletedPhotoIDs:self.tappedPhotoID];
+    }
+    [self updatePhotoAtIndex:self.selectedIndexPath.row];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
