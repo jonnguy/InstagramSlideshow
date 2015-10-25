@@ -109,11 +109,15 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kISSNotificationFetchedData object:self];
             
             if (index == 0) {
-                self.nextURLs[0] = fetched[kISSPaginationKey][kISSNextURLKey];
-                self.fetchingFirst = NO;
+                if ([fetched[kISSPaginationKey][kISSNextURLKey] isEqual:[NSNull null]]) {
+                    self.nextURLs[0] = fetched[kISSPaginationKey][kISSNextURLKey];
+                    self.fetchingFirst = NO;
+                }
             } else {
-                self.nextURLs[1] = fetched[kISSPaginationKey][kISSNextURLKey];
-                self.fetchingSecond = NO;
+                if ([fetched[kISSPaginationKey][kISSNextURLKey] isEqual:[NSNull null]]) {
+                    self.nextURLs[1] = fetched[kISSPaginationKey][kISSNextURLKey];
+                    self.fetchingSecond = NO;
+                }
             }
             
             [self cacheImagesFromInstagram];
