@@ -106,7 +106,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self performSelector:@selector(viewTapped) withObject:nil afterDelay:4.0];
+    [self performSelector:@selector(viewTapped) withObject:nil afterDelay:5.0];
 }
 
 - (void)didReceiveMemoryWarning {
