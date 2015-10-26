@@ -224,7 +224,7 @@ static NSString * const reuseIdentifier = @"ImageCell";
                 }
                 
                 NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
-                if (nextURL) {
+                if (nextURL && ![nextURL isEqual:[NSNull null]]) {
                     [ISSDataShare shared].nextURLs[1] = nextURL;
                 }
                 NSLog(@"Next URL 2: %@", nextURL);

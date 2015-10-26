@@ -109,12 +109,12 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kISSNotificationFetchedData object:self];
             
             if (index == 0) {
-                if ([fetched[kISSPaginationKey][kISSNextURLKey] isEqual:[NSNull null]]) {
+                if (fetched[kISSPaginationKey][kISSNextURLKey] && ![fetched[kISSPaginationKey][kISSNextURLKey] isEqual:[NSNull null]]) {
                     self.nextURLs[0] = fetched[kISSPaginationKey][kISSNextURLKey];
                     self.fetchingFirst = NO;
                 }
             } else {
-                if ([fetched[kISSPaginationKey][kISSNextURLKey] isEqual:[NSNull null]]) {
+                if (fetched[kISSPaginationKey][kISSNextURLKey] && ![fetched[kISSPaginationKey][kISSNextURLKey] isEqual:[NSNull null]]) {
                     self.nextURLs[1] = fetched[kISSPaginationKey][kISSNextURLKey];
                     self.fetchingSecond = NO;
                 }
