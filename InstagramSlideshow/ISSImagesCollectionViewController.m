@@ -216,11 +216,20 @@ static NSString * const reuseIdentifier = @"ImageCell";
             if (error) {
                 NSLog(@"Error with 2nd token: %@", error.localizedDescription);
             } else {
-                while ([self.shownPhotoIDs count] < 20 && [[ISSDataShare shared].queuedPhotoIDs count]) {
+                while ([self.shownPhotoIDs count] < 20 && [[ISSDataShare shared].queuedPhotoIDs count] > 0) {
                     [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
-                    });
+//                    [self.collectionView performBatchUpdates:^{
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
+//                            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
+//                        });
+//                    } completion:^(BOOL finished) {
+//                        //
+//                    }];
+//                    [self.shownPhotoIDs addObject:[ISSDataShare popQueuedPhoto]];
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.shownPhotoIDs.count-1 inSection:0]]];
+//                    });
                 }
                 
                 NSString *nextURL = dict[kISSPaginationKey][kISSNextURLKey];
@@ -228,6 +237,8 @@ static NSString * const reuseIdentifier = @"ImageCell";
                     [ISSDataShare shared].nextURLs[1] = nextURL;
                 }
                 NSLog(@"Next URL 2: %@", nextURL);
+                
+                [self.collectionView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
             }
         }];
     }
